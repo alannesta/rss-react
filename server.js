@@ -18,8 +18,8 @@ app.use(express.static('public/dist'));
 
 //using regex to support backbone pushState:true
 app.get(/^\/app(\/\w*)*$/, function(req,res) {
-    console.log(path.join(__dirname, 'public/dist/index.html'));
-    res.sendFile(path.join(__dirname, 'public/dist/index.html'));
+    console.log(path.join(__dirname, 'public/index.html'));
+    res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
 app.use('/api', api);

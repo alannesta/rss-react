@@ -4,6 +4,7 @@ var gulp = require('gulp');
 var runSequence = require('run-sequence');
 var nodemon = require('gulp-nodemon');
 var browserify = require('browserify');
+var reactify = require('reactify');
 var source = require('vinyl-source-stream');
 var sass = require('gulp-sass');
 var path = require('path');
@@ -18,7 +19,7 @@ gulp.task('default', function(cb) {
 });
 
 gulp.task('watch', function() {
-	gulp.watch(['public/scripts/**/*.js', 'public/index.html', 'public/scripts/templates/**/*.hbs'], ['inject']);
+	gulp.watch(['public/src/**/*.js', 'public/index.html'], ['build-app']);
 	gulp.watch(['public/styles/*.sass'], ['sass']);
 
 });
@@ -26,11 +27,11 @@ gulp.task('watch', function() {
 // bundle applicatio code
 gulp.task('build-app', function() {
 
-	var b = browserify(path.join(__dirname, 'public/scripts/app.js'), {
+	var b = browserify(path.join(__dirname, 'public/src/app.js'), {
 		debug: true
 	});
 
-	b.transform(hbsfy);
+	b.transform(reactify);
 
 	return b.bundle()
 		//Pass desired output filename to vinyl-source-stream
