@@ -1,7 +1,9 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
+var request = require('superagent');
 var _ = require('underscore');
+
 
 var CHANGE_EVENT = 'change';
 
@@ -27,6 +29,13 @@ var FeedStore = _.extend(feed_mixin, {
 
 	removeChangeListener: function() {
 		this.removeListener(CHANGE_EVENT, callback);
+	},
+
+	fetch: function() {
+		// fecth from server
+		request.get('/api/feeds').end(function(req, res) {
+			console.log(res);
+		});
 	}
 });
 
@@ -34,7 +43,13 @@ var FeedStore = _.extend(feed_mixin, {
 AppDispatcher.register(function(action) {
 	switch(action.actionType) {
 		case 'SELECT_FEED':
-			FeedStore.currentFeed = action.feed;
+			_feedsState.currentFeed = action.feed;
+			FeedStore.emitChange();
+			break;
+
+		case 'FEEDS_INIT':
+			console.log('feeds init');
+			_feedsState.allFeeds = action.feeds;
 			FeedStore.emitChange();
 			break;
 
@@ -43,4 +58,4 @@ AppDispatcher.register(function(action) {
 	}
 });
 
-module.exports = TodoStore;
+module.exports = FeedStore;

@@ -1,6 +1,7 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
-var FeedStore = require('./feedStore');
+var FeedStore = require('../stores/feedStore');
+var FeedAction = require('../actions/feedActions');
 var FeedList = require('./feedList');
 var FeedContent = require('./feedContent');
 
@@ -17,6 +18,7 @@ var app = React.createClass({
 	},
 
 	componentDidMount: function() {
+		FeedAction.fetch();	// is this the place?
 		FeedStore.addChangeListener(this._onChange);
 	},
 
@@ -25,6 +27,7 @@ var app = React.createClass({
 	},
 
 	_onChange: function() {
+		console.log('changed', this.feedState());
 		this.setState(this.feedState());
 	},
 
@@ -32,7 +35,7 @@ var app = React.createClass({
 		return (
 			<section>
 				<header>
-					<FeedSearchInput placeholder="Feed to subscribe"/>
+					FeedSearchInput
 				</header>
 				<FeedList feeds = {this.state.allFeeds}></FeedList>
 				<FeedContent feed = {this.state.selectedFeed}></FeedContent>

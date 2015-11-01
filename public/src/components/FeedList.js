@@ -7,8 +7,7 @@ var FeedList = React.createClass({
 
 		var feeds = [];
 
-		for (var key in this.props.todos) {
-			//todos.push(this.props.todos[key]);
+		for (var key in this.props.feeds) {
 			feeds.push(<FeedItem feed = {this.props.feeds[key]}/>)
 		}
 

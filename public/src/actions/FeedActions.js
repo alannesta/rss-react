@@ -1,11 +1,14 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
+var request = require('superagent');
 
 var FeedActions = {
-
-	load: function(text) {
-		AppDispatcher.dispatch({
-			actionType: 'CREATE_TODO',
-			text: text
+	fetch: function() {
+		request.get('/api/feeds').end(function(req, res) {
+			console.log(res);
+			AppDispatcher.dispatch({
+				actionType: 'FEEDS_INIT',
+				feeds: res.body
+			});
 		});
 	}
 };
