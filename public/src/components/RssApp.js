@@ -8,9 +8,7 @@ var FeedContent = require('./feedContent');
 var app = React.createClass({
 
 	feedState: function() {
-		return {
-			allFeeds: FeedStore.getAll()
-		};
+		return FeedStore.getState();
 	},
 
 	getInitialState: function() {
@@ -18,12 +16,25 @@ var app = React.createClass({
 	},
 
 	componentDidMount: function() {
+		console.log('component did mount');
 		FeedAction.fetch();	// is this the place?
 		FeedStore.addChangeListener(this._onChange);
 	},
 
 	componentWillUnmount: function() {
 		FeedStore.removeChangeListener(this._onChange);
+	},
+
+	componentWillReceiveProps: function() {
+		console.log('componentWillReceiveProps');
+	},
+
+	componentWillUpdate: function() {
+		console.log('component will update');
+	},
+
+	componentDidUpdate: function() {
+		console.log('componenet did update');
 	},
 
 	_onChange: function() {
@@ -38,7 +49,7 @@ var app = React.createClass({
 					FeedSearchInput
 				</header>
 				<FeedList feeds = {this.state.allFeeds}></FeedList>
-				<FeedContent feed = {this.state.selectedFeed}></FeedContent>
+				<FeedContent feed = {this.state.currentFeed}></FeedContent>
 			</section>
 		)
 	}

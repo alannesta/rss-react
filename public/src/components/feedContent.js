@@ -3,7 +3,9 @@ var React = require('react');
 var FeedContent = React.createClass({
 	render: function() {
 		return (
-			<h1>Feed Content</h1>
+			<section>
+				<h1>{this.props.feed.name}</h1>
+			</section>
 		)
 	}
 });

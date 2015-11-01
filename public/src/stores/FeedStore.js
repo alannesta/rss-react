@@ -16,9 +16,10 @@ var _feedsState = {
 var feed_mixin = _.extend({}, EventEmitter.prototype);
 
 var FeedStore = _.extend(feed_mixin, {
-	getAll: function() {
-		return _feedsState.allFeeds;
+	getState: function() {
+		return _feedsState;
 	},
+
 	emitChange: function() {
 		this.emit(CHANGE_EVENT);
 	},

@@ -10,6 +10,14 @@ var FeedActions = {
 				feeds: res.body
 			});
 		});
+	},
+
+	selectFeed: function(feed) {
+		console.log('why on click');
+		AppDispatcher.dispatch({
+			actionType: 'SELECT_FEED',
+			feed: feed
+		});
 	}
 };
 
