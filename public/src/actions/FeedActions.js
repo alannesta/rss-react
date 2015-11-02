@@ -14,7 +14,6 @@ var FeedActions = {
 	},
 
 	selectFeed: function(feed) {
-
 		FeedUtil.loadFeed(feed.feedUrl).then(function(content) {
 			AppDispatcher.dispatch({
 				actionType: 'SELECT_FEED',
@@ -22,7 +21,18 @@ var FeedActions = {
 				content: content
 			});
 		});
+	},
 
+	searchFeed: function(val) {
+		FeedUtil.getFeedInfo(val).then(function(feedName) {
+			AppDispatcher.dispatch({
+				actionType: 'CONFIRM_MODAL',
+				feed: {
+					name: feedName,
+					url: val
+				}
+			})
+		})
 	}
 };
 

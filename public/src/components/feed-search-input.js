@@ -1,9 +1,10 @@
 var React = require('react');
+var FeedActions = require('../actions/FeedActions');
 
 var FeedContent = React.createClass({
 
 	searchFeed: function() {
-
+		FeedActions.searchFeed(this.ref.value);
 	},
 
 	render: function() {
