@@ -1,5 +1,6 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var request = require('superagent');
+var FeedUtil = require('../feedUtil');
 
 var FeedActions = {
 	fetch: function() {
@@ -13,10 +14,18 @@ var FeedActions = {
 	},
 
 	selectFeed: function(feed) {
-		console.log('why on click');
 		AppDispatcher.dispatch({
 			actionType: 'SELECT_FEED',
 			feed: feed
+		});
+	},
+
+	fetchContent: function(url) {
+		FeedUtil.loadFeed(url).then(function(content) {
+			AppDispatcher.dispatch({
+				actionType: 'CONTENT_LOADED',
+				content: content
+			});
 		});
 	}
 };

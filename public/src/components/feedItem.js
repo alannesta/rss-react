@@ -5,6 +5,7 @@ var FeedItem = React.createClass({
 
 	onClickHandler: function() {
 		FeedActions.selectFeed(this.props.feed);
+		FeedActions.fetchContent(this.props.feed.feedUrl);
 	},
 
 	render: function() {

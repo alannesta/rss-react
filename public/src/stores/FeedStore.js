@@ -10,7 +10,8 @@ var CHANGE_EVENT = 'change';
 
 var _feedsState = {
 	currentFeed: '',
-	allFeeds: []
+	allFeeds: [],
+	feedContent: []
 };
 
 var feed_mixin = _.extend({}, EventEmitter.prototype);
@@ -30,13 +31,6 @@ var FeedStore = _.extend(feed_mixin, {
 
 	removeChangeListener: function() {
 		this.removeListener(CHANGE_EVENT, callback);
-	},
-
-	fetch: function() {
-		// fecth from server
-		request.get('/api/feeds').end(function(req, res) {
-			console.log(res);
-		});
 	}
 });
 
@@ -53,6 +47,10 @@ AppDispatcher.register(function(action) {
 			_feedsState.allFeeds = action.feeds;
 			FeedStore.emitChange();
 			break;
+
+		case 'CONTENT_LOADED':
+			_feedsState.feedContent = action.content;
+			FeedStore.emitChange();
 
 		default:
 		// no op

@@ -49,7 +49,7 @@ var app = React.createClass({
 					FeedSearchInput
 				</header>
 				<FeedList feeds = {this.state.allFeeds}></FeedList>
-				<FeedContent feed = {this.state.currentFeed}></FeedContent>
+				<FeedContent content = {this.state.feedContent}></FeedContent>
 			</section>
 		)
 	}
