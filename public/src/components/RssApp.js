@@ -4,6 +4,7 @@ var FeedStore = require('../stores/feedStore');
 var FeedAction = require('../actions/feedActions');
 var FeedList = require('./feedList');
 var FeedContent = require('./feedContent');
+var FeedSearchInput = require('./feed-search-input');
 
 var app = React.createClass({
 
@@ -45,11 +46,8 @@ var app = React.createClass({
 	render: function() {
 		return (
 			<section>
-				<header className = 'toolbar'>
-					FeedSearchInput
-				</header>
-				<section className = 'feeds'>
-
+				<FeedSearchInput></FeedSearchInput>
+				<section className = "feeds">
 					<FeedList selected = {this.state.currentFeed} feeds = {this.state.allFeeds}></FeedList>
 					<FeedContent content = {this.state.feedContent}></FeedContent>
 				</section>
