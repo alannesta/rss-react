@@ -9,7 +9,7 @@ var CHANGE_EVENT = 'change';
 
 
 var _feedsState = {
-	currentFeed: '',
+	currentFeed: {},
 	allFeeds: [],
 	feedContent: []
 };
@@ -39,6 +39,7 @@ AppDispatcher.register(function(action) {
 	switch(action.actionType) {
 		case 'SELECT_FEED':
 			_feedsState.currentFeed = action.feed;
+			_feedsState.feedContent = action.content;
 			FeedStore.emitChange();
 			break;
 
@@ -47,10 +48,6 @@ AppDispatcher.register(function(action) {
 			_feedsState.allFeeds = action.feeds;
 			FeedStore.emitChange();
 			break;
-
-		case 'CONTENT_LOADED':
-			_feedsState.feedContent = action.content;
-			FeedStore.emitChange();
 
 		default:
 		// no op

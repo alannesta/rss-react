@@ -8,7 +8,7 @@ var FeedList = React.createClass({
 		var feeds = [];
 
 		for (var key in this.props.feeds) {
-			feeds.push(<FeedItem feed = {this.props.feeds[key]} key = {this.props.feeds[key]._id}/>)
+			feeds.push(<FeedItem selected = {this.props.selected} feed = {this.props.feeds[key]} key = {this.props.feeds[key]._id}/>)
 		}
 
 		return (

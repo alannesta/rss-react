@@ -14,19 +14,15 @@ var FeedActions = {
 	},
 
 	selectFeed: function(feed) {
-		AppDispatcher.dispatch({
-			actionType: 'SELECT_FEED',
-			feed: feed
-		});
-	},
 
-	fetchContent: function(url) {
-		FeedUtil.loadFeed(url).then(function(content) {
+		FeedUtil.loadFeed(feed.feedUrl).then(function(content) {
 			AppDispatcher.dispatch({
-				actionType: 'CONTENT_LOADED',
+				actionType: 'SELECT_FEED',
+				feed: feed,
 				content: content
 			});
 		});
+
 	}
 };
 

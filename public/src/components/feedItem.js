@@ -1,16 +1,19 @@
 var React = require('react');
 var FeedActions = require('../actions/feedActions');
+var classNames = require('classnames');
 
 var FeedItem = React.createClass({
 
 	onClickHandler: function() {
 		FeedActions.selectFeed(this.props.feed);
-		FeedActions.fetchContent(this.props.feed.feedUrl);
 	},
 
 	render: function() {
+		var selectedClass = classNames({
+			'selected': this.props.selected._id === this.props.feed._id
+		});
 		return (
-			<li onClick={this.onClickHandler}>{this.props.feed.name}</li>
+			<li className={selectedClass} onClick={this.onClickHandler}>{this.props.feed.name}</li>
 			//<li onClick={FeedActions.selectFeed.bind(this, this.props.feed)}>{this.props.feed.name}</li>	// more straight forward
 		)
 	}
