@@ -10,7 +10,7 @@ var FeedContent = React.createClass({
 		});
 
 		return (
-			<section>
+			<section className = 'feed-content'>
 				{content}
 			</section>
 		)

@@ -45,11 +45,14 @@ var app = React.createClass({
 	render: function() {
 		return (
 			<section>
-				<header>
+				<header className = 'toolbar'>
 					FeedSearchInput
 				</header>
-				<FeedList selected = {this.state.currentFeed} feeds = {this.state.allFeeds}></FeedList>
-				<FeedContent content = {this.state.feedContent}></FeedContent>
+				<section className = 'feeds'>
+
+					<FeedList selected = {this.state.currentFeed} feeds = {this.state.allFeeds}></FeedList>
+					<FeedContent content = {this.state.feedContent}></FeedContent>
+				</section>
 			</section>
 		)
 	}

@@ -10,7 +10,8 @@ var FeedItem = React.createClass({
 
 	render: function() {
 		var selectedClass = classNames({
-			'selected': this.props.selected._id === this.props.feed._id
+			'selected': this.props.selected._id === this.props.feed._id,
+			'feed-nav-item': true
 		});
 		return (
 			<li className={selectedClass} onClick={this.onClickHandler}>{this.props.feed.name}</li>

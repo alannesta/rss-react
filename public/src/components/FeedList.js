@@ -12,7 +12,7 @@ var FeedList = React.createClass({
 		}
 
 		return (
-			<section>
+			<section className = 'feed-nav'>
 				<ul>
 					{feeds}
 				</ul>
