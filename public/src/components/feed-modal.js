@@ -1,6 +1,7 @@
 var React = require('react');
 var ModalStore = require('../stores/modal-store');
 var classNames = require('classnames');
+var ViewActions = require('../actions/view-actions');
 
 var FeedModal = React.createClass({
 
@@ -10,6 +11,15 @@ var FeedModal = React.createClass({
 
 	modalState: function() {
 		return ModalStore.getState();
+	},
+
+	confirm: function() {
+		this.state.onConfirm();
+		ViewActions.closeModal();
+	},
+
+	close: function() {
+		ViewActions.closeModal();
 	},
 
 	componentDidMount: function() {
@@ -34,8 +44,17 @@ var FeedModal = React.createClass({
 		var display = this.state.shown ? 'block': 'none';
 
 		return (
-			<section feed = {this.state.modalContent} className = {modalClass} style = {{display: display}}>
-				Are you sure you want to subscribe to 123?
+			<section style = {{display: display}}>
+				<section className = {modalClass}>
+					<section>
+						Are you sure you want to subscribe to {this.state.modalContent.name}?
+					</section>
+					<section>
+						<button onClick = {this.confirm}>Confirm</button>
+						<button onClick = {this.close}>Cancel</button>
+					</section>
+				</section>
+				<div className = "backdrop"></div>
 			</section>
 		)
 	}

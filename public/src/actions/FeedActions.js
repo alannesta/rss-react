@@ -29,12 +29,21 @@ var FeedActions = {
 				actionType: 'SHOW_MODAL',
 				feed: {
 					name: feedName,
-					url: val
+					feedUrl: val
 				}
 			})
 		}, function(err) {
 			console.log(err);
 		})
+	},
+
+	subscribeFeed: function(feed) {
+		console.log('subscribed');
+		request.post('/api/feed')
+			.send(feed)
+			.end(function(req, res) {
+				console.log(res);
+			})
 	}
 };
 

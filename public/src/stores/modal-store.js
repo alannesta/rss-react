@@ -2,6 +2,7 @@ var AppDispatcher = require('../dispatcher/AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
 var request = require('superagent');
+var FeedActions = require('../actions/FeedActions');
 var _ = require('underscore');
 
 
@@ -14,7 +15,10 @@ var TYPE = {
 var _modalState = {
 	modalType: TYPE.DEFAULT,
 	shown: false,
-	modalContent: {}
+	modalContent: {},
+	onConfirm: function() {
+		FeedActions.subscribeFeed(this.modalContent);
+	}
 };
 
 
@@ -40,12 +44,14 @@ var ModalStore = _.extend({}, EventEmitter.prototype, {
 AppDispatcher.register(function(action) {
 	switch(action.actionType) {
 		case 'SHOW_MODAL':
-			console.log('in');
 			_modalState.shown = true;
 			_modalState.modalContent = action.feed;
 			ModalStore.emitChange();
 			break;
 
+		case 'CLOSE_MODAL':
+			_modalState.shown = false;
+			ModalStore.emitChange();
 	}
 });
 
