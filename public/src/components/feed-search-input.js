@@ -4,7 +4,8 @@ var FeedActions = require('../actions/FeedActions');
 var FeedContent = React.createClass({
 
 	searchFeed: function() {
-		FeedActions.searchFeed(this.ref.value);
+		console.log(this.refs.inputField.value);
+		FeedActions.searchFeed(this.refs.inputField.value);
 	},
 
 	render: function() {

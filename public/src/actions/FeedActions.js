@@ -26,12 +26,14 @@ var FeedActions = {
 	searchFeed: function(val) {
 		FeedUtil.getFeedInfo(val).then(function(feedName) {
 			AppDispatcher.dispatch({
-				actionType: 'CONFIRM_MODAL',
+				actionType: 'SHOW_MODAL',
 				feed: {
 					name: feedName,
 					url: val
 				}
 			})
+		}, function(err) {
+			console.log(err);
 		})
 	}
 };
