@@ -2,8 +2,11 @@ var React = require('react');
 var ModalStore = require('../stores/modal-store');
 var classNames = require('classnames');
 var ViewActions = require('../actions/view-actions');
+var ModalMixin = require('./common/modal-mixin');
 
 var FeedModal = React.createClass({
+
+	mixins: [ModalMixin],
 
 	getInitialState: function() {
 		return ModalStore.getState();
@@ -27,6 +30,7 @@ var FeedModal = React.createClass({
 	},
 
 	componentWillUnmount: function() {
+		// this is actually never called if modal visibility is controlled by css class
 		ModalStore.removeChangeListener(this._onChange);
 	},
 
