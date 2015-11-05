@@ -1,7 +1,7 @@
 var ReactDOM = require('react-dom');
 var React = require('react');
 
-var FeedApp = require('./components/rssApp');
+var FeedApp = require('./components/rss-app');
 var Modal = require('./components/feed-modal');
 
 
