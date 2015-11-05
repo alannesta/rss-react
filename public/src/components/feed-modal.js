@@ -38,25 +38,15 @@ var FeedModal = React.createClass({
 	},
 
 	render: function() {
-
-		var modalClass = classNames({
-			'add-feed-modal': true
-		});
-
-		var display = this.state.shown ? 'block': 'none';
-
 		return (
-			<section style = {{display: display}}>
-				<section className = {modalClass}>
-					<section>
-						Are you sure you want to subscribe to {this.state.modalContent.name}?
-					</section>
-					<section>
-						<button onClick = {this.confirm}>Confirm</button>
-						<button onClick = {this.close}>Cancel</button>
-					</section>
+			<section className = "add-feed-modal">
+				<section>
+					Are you sure you want to subscribe to {this.state.modalContent.name}?
 				</section>
-				<div className = "backdrop"></div>
+				<section>
+					<button onClick = {this.confirm}>Confirm</button>
+					<button onClick = {this.close}>Cancel</button>
+				</section>
 			</section>
 		)
 	}

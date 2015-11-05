@@ -42,13 +42,13 @@ var app = React.createClass({
 	render: function() {
 		return (
 			<section>
-				<FeedSearchInput></FeedSearchInput>
+				<FeedSearchInput />
 				<section className = "feeds">
 					<FeedList selected = {this.state.currentFeed} feeds = {this.state.allFeeds}></FeedList>
 					<FeedContent content = {this.state.feedContent}></FeedContent>
 				</section>
-				<ViewManager></ViewManager>
-				<div className = "modal-container"></div>
+				<ViewManager />
+				<div id = "modal-container"></div>
 				<div className = "backdrop"></div>
 			</section>
 		)

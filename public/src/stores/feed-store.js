@@ -29,7 +29,7 @@ var FeedStore = _.extend(feed_mixin, {
 		this.on(CHANGE_EVENT, callback);
 	},
 
-	removeChangeListener: function() {
+	removeChangeListener: function(callback) {
 		this.removeListener(CHANGE_EVENT, callback);
 	}
 });

@@ -9,7 +9,6 @@ var _viewState = {
 	modalShown: false
 };
 
-
 var ViewStore = _.extend({}, EventEmitter.prototype, {
 	getState: function() {
 		return _viewState;
@@ -24,7 +23,7 @@ var ViewStore = _.extend({}, EventEmitter.prototype, {
 	},
 
 	removeChangeListener: function() {
-		this.removeListener(CHANGE_EVENT, callback);
+		this.removeListener(CHANGE_EVENT);
 	}
 });
 

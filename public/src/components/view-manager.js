@@ -35,19 +35,20 @@ var ViewManager = React.createClass({
 		var manager = this;
 		var viewState = ViewStore.getState();
 		if (viewState.modalShown) {
-			$('.body').addClass('modal-shown');
+			$('body').addClass('modal-shown');
 			ReactDOM.render(
-				<FeedModal/>,
-				manager.regions.modalRegion
+				<FeedModal />,
+				document.getElementById('modal-container')
 			)
 		}else {
-			$('.body').removeClass('modal-shown');
-			ReactDOM.unmountComponentAtNode(manager.regions.modalRegion);
+			$('body').removeClass('modal-shown');
+			ReactDOM.unmountComponentAtNode(document.getElementById('modal-container'));
 		}
+		this.setState(viewState);
 	},
 
 	render: function() {
-		return false;	// not rendering any DOM elements
+		return null;	// not rendering any DOM elements
 	}
 });
 
