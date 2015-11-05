@@ -1,5 +1,5 @@
 var React = require('react');
-var FeedActions = require('../actions/FeedActions');
+var FeedActions = require('../actions/feed-actions');
 
 var FeedContent = React.createClass({
 

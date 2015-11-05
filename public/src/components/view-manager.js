@@ -1,12 +1,19 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
+
+var FeedModal = require('./feed-modal');
+
 var ViewStore = require('../stores/view-store');
+var $ = require('jquery');
 
 var ViewManager = React.createClass({
 
+	regions: {
+		modalRegion: document.getElementsByClassName('modal-container')
+	},
+
 	componentDidMount: function() {
-		console.log('component did mount');
-		ViewStore.removeChangeListener(this._onChange);
+		ViewStore.addChangeListener(this._onChange);
 
 	},
 
@@ -15,20 +22,32 @@ var ViewManager = React.createClass({
 	},
 
 	componentWillReceiveProps: function() {
-		console.log('componentWillReceiveProps');
 	},
 
 	componentWillUpdate: function() {
-		console.log('component will update');
 
 	},
 
 	componentDidUpdate: function() {
-		console.log('componenet did update');
+	},
+
+	_onChange: function() {
+		var manager = this;
+		var viewState = ViewStore.getState();
+		if (viewState.modalShown) {
+			$('.body').addClass('modal-shown');
+			ReactDOM.render(
+				<FeedModal/>,
+				manager.regions.modalRegion
+			)
+		}else {
+			$('.body').removeClass('modal-shown');
+			ReactDOM.unmountComponentAtNode(manager.regions.modalRegion);
+		}
 	},
 
 	render: function() {
-		return React.DOM.noscript();
+		return false;	// not rendering any DOM elements
 	}
 });
 

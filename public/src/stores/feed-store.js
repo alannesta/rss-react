@@ -44,7 +44,6 @@ AppDispatcher.register(function(action) {
 			break;
 
 		case 'FEEDS_INIT':
-			console.log('feeds init');
 			_feedsState.allFeeds = action.feeds;
 			FeedStore.emitChange();
 			break;

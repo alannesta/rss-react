@@ -29,6 +29,7 @@ li.selected
   font-size: 18px
 
 .backdrop
+  display: none
   position: fixed
   left: 0px
   right: 0px
@@ -38,6 +39,7 @@ li.selected
   opacity: 0.8
 
 .add-feed-modal
+  display: none
   position: absolute
   z-index: 100
   top: 50px
@@ -45,3 +47,8 @@ li.selected
   left: 30%
   background-color: white
 
+.modal-shown
+  .backdrop
+    display: block
+  .add-feed-modal
+    display: block

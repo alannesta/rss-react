@@ -6,8 +6,6 @@ var ModalMixin = require('./common/modal-mixin');
 
 var FeedModal = React.createClass({
 
-	mixins: [ModalMixin],
-
 	getInitialState: function() {
 		return ModalStore.getState();
 	},
