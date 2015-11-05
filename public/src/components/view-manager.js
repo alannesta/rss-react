@@ -1,6 +1,6 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
-
+var FeedActions = require('../actions/view-actions');
 var FeedModal = require('./feed-modal');
 
 var ViewStore = require('../stores/view-store');
@@ -34,10 +34,11 @@ var ViewManager = React.createClass({
 	_onChange: function() {
 		var manager = this;
 		var viewState = ViewStore.getState();
+		// TODO: modal type should also be in view state
 		if (viewState.modalShown) {
 			$('body').addClass('modal-shown');
 			ReactDOM.render(
-				<FeedModal />,
+				<FeedModal onConfirm = {FeedActions.subscribeFeed} />,
 				document.getElementById('modal-container')
 			)
 		}else {

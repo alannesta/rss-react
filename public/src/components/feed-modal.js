@@ -15,7 +15,8 @@ var FeedModal = React.createClass({
 	},
 
 	confirm: function() {
-		this.state.onConfirm();
+		console.log(this.props);
+		this.props.onConfirm.apply(null, this.state.modalContent);
 		ViewActions.closeModal();
 	},
 

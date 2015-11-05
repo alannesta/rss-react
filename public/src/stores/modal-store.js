@@ -13,10 +13,11 @@ var TYPE = {
 
 var _modalState = {
 	modalType: TYPE.DEFAULT,
-	modalContent: {},
-	onConfirm: function() {
-		FeedActions.subscribeFeed(this.modalContent);
-	}
+	modalContent: {}
+	// should not in store
+	//onConfirm: function() {
+	//	FeedActions.subscribeFeed(this.modalContent);
+	//}
 };
 
 
