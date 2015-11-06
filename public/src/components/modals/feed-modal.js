@@ -1,8 +1,7 @@
 var React = require('react');
-var ModalStore = require('../stores/modal-store');
+var ModalStore = require('../../stores/modal-store');
 var classNames = require('classnames');
-var ViewActions = require('../actions/view-actions');
-var ModalMixin = require('./common/modal-mixin');
+var ViewActions = require('../../actions/view-actions');
 
 var FeedModal = React.createClass({
 
@@ -42,7 +41,7 @@ var FeedModal = React.createClass({
 		return (
 			<section className = "add-feed-modal">
 				<section>
-					Are you sure you want to subscribe to {this.state.modalContent.name}?
+					123
 				</section>
 				<section>
 					<button onClick = {this.confirm}>Confirm</button>

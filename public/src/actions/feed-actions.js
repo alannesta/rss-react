@@ -26,13 +26,20 @@ var FeedActions = {
 		FeedUtil.getFeedInfo(val).then(function(feedName) {
 			AppDispatcher.dispatch({
 				actionType: 'SHOW_MODAL',
-				feed: {
+				content: {
 					name: feedName,
 					feedUrl: val
-				}
+				},
+				modalType: 'ADD_FEED'
 			})
 		}, function(err) {
 			console.log(err);
+			AppDispatcher.dispatch({
+				actionType: 'SHOW_MODAL',
+				content: 'Could not find feed, check your URL',
+				modalType: 'ERROR'
+
+			})
 		})
 	},
 

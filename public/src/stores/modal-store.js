@@ -12,12 +12,7 @@ var TYPE = {
 };
 
 var _modalState = {
-	modalType: TYPE.DEFAULT,
 	modalContent: {}
-	// should not in store
-	//onConfirm: function() {
-	//	FeedActions.subscribeFeed(this.modalContent);
-	//}
 };
 
 
@@ -43,7 +38,7 @@ var ModalStore = _.extend({}, EventEmitter.prototype, {
 AppDispatcher.register(function(action) {
 	switch(action.actionType) {
 		case 'SHOW_MODAL':
-			_modalState.modalContent = action.feed;
+			_modalState.modalContent = action.content;
 			ModalStore.emitChange();
 			break;
 	}

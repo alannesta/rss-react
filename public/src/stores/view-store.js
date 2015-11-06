@@ -6,7 +6,8 @@ var _ = require('underscore');
 var CHANGE_EVENT = 'change';
 
 var _viewState = {
-	modalShown: false
+	modalShown: false,
+	modalType: ''
 };
 
 var ViewStore = _.extend({}, EventEmitter.prototype, {
@@ -32,12 +33,14 @@ AppDispatcher.register(function(action) {
 	switch(action.actionType) {
 		case 'SHOW_MODAL':
 			_viewState.modalShown = true;
+			_viewState.modalType = action.modalType;
 			ViewStore.emitChange();
 			break;
 
 		case 'CLOSE_MODAL':
 			_viewState.modalShown = false;
 			ViewStore.emitChange();
+			break;
 	}
 });
 
