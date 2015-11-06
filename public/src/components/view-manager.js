@@ -8,10 +8,6 @@ var $ = require('jquery');
 
 var ViewManager = React.createClass({
 
-	regions: {
-		modalRegion: document.getElementById('modal-container')
-	},
-
 	componentDidMount: function() {
 		ViewStore.addChangeListener(this._onChange);
 
@@ -32,19 +28,18 @@ var ViewManager = React.createClass({
 	},
 
 	_onChange: function() {
-		var manager = this;
 		var viewState = ViewStore.getState();
 
 		// TODO: modal type should also be in view state
 		if (viewState.modalShown) {
 			$('body').addClass('modal-shown');
 			ReactDOM.render(
-				<FeedModal onConfirm = {FeedActions.subscribeFeed} />,
-				manager.regions.modalRegion
+				<FeedModal onConfirm = {FeedActions.subscribeFeed.bind(FeedActions)} />,
+				document.getElementById('modal-container')
 			)
 		}else {
 			$('body').removeClass('modal-shown');
-			ReactDOM.unmountComponentAtNode(manager.regions.modalRegion);
+			ReactDOM.unmountComponentAtNode(document.getElementById('modal-container'));
 		}
 		this.setState(viewState);
 	},

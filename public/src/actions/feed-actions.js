@@ -37,11 +37,13 @@ var FeedActions = {
 	},
 
 	subscribeFeed: function(feed) {
+		var actions = this;
 		console.log('subscribed');
 		request.post('/api/feed')
 			.send(feed)
 			.end(function(req, res) {
-				console.log(res);
+				// refresh the feed list when success
+				actions.fetch();
 			})
 	}
 };
