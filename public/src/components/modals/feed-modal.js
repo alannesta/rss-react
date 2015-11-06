@@ -34,7 +34,6 @@ var FeedModal = React.createClass({
 
 	_onChange: function() {
 		this.setState(this.modalState());
-
 	},
 
 	render: function() {

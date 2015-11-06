@@ -4,7 +4,7 @@ var FeedUtil = require('../feedUtil');
 
 var FeedActions = {
 	fetch: function() {
-		request.get('/api/feeds').end(function(req, res) {
+		request.get('/api/feeds').end(function(error, res) {
 			AppDispatcher.dispatch({
 				actionType: 'FEEDS_INIT',
 				feeds: res.body
@@ -48,9 +48,16 @@ var FeedActions = {
 		console.log('subscribed');
 		request.post('/api/feed')
 			.send(feed)
-			.end(function(req, res) {
+			.end(function(err, res) {
 				// refresh the feed list when success
 				actions.fetch();
+				if (err) {
+					AppDispatcher.dispatch({
+						actionType: 'SHOW_MODAL',
+						content: 'Fail to subscribe to feed',
+						modalType: 'ERROR'
+					});
+				}
 			})
 	}
 };
