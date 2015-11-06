@@ -41,7 +41,7 @@ var FeedModal = React.createClass({
 		return (
 			<section className = "add-feed-modal">
 				<section>
-					123
+					Are you sure you want to subscribe to {this.state.modalContent.name}?
 				</section>
 				<section>
 					<button onClick = {this.confirm}>Confirm</button>

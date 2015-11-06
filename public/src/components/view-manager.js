@@ -42,11 +42,13 @@ var ViewManager = React.createClass({
 						<FeedModal onConfirm = {FeedActions.subscribeFeed.bind(FeedActions)} />,
 						document.getElementById('modal-container')
 					);
+					break;
 				case 'ERROR':
 					ReactDOM.render(
 						<ErrorModal />,
 						document.getElementById('modal-container')
 					);
+					break;
 			}
 		}else {
 			$('body').removeClass('modal-shown');
