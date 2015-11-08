@@ -36,13 +36,24 @@ var FeedStore = _.extend(feed_mixin, {
 AppDispatcher.register(function(action) {
 	switch(action.actionType) {
 		case 'SELECT_FEED':
-			_feedsState.currentFeed = action.feed;
+			_feedsState.currentFeed.feed = action.feed;
 			_feedsState.feedContent = action.content;
 			FeedStore.emitChange();
 			break;
 
 		case 'FEEDS_INIT':
 			_feedsState.allFeeds = action.feeds;
+			FeedStore.emitChange();
+			break;
+
+		case 'TOGGLE_FEED_ACTIONS':
+			var idx = -1;
+			_feedsState.allFeeds.forEach(function(item, index) {
+				if (item._id === action.feed._id) {
+					idx = index;
+				}
+			});
+			_feedsState.allFeeds[idx].showActions = action.showActions;
 			FeedStore.emitChange();
 			break;
 

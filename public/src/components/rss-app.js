@@ -9,47 +9,48 @@ var ViewManager = require('./view-manager');
 
 var app = React.createClass({
 
-	feedState: function() {
+	feedState: function () {
 		return FeedStore.getState();
 	},
 
-	getInitialState: function() {
+	getInitialState: function () {
 		return this.feedState()
 	},
 
-	componentDidMount: function() {
+	componentDidMount: function () {
 		FeedAction.fetch();	// is this the place?
 		FeedStore.addChangeListener(this._onChange);
 	},
 
-	componentWillUnmount: function() {
+	componentWillUnmount: function () {
 		FeedStore.removeChangeListener(this._onChange);
 	},
 
-	componentWillReceiveProps: function() {
+	componentWillReceiveProps: function () {
 	},
 
-	componentWillUpdate: function() {
+	componentWillUpdate: function () {
 	},
 
-	componentDidUpdate: function() {
+	componentDidUpdate: function () {
 	},
 
-	_onChange: function() {
+	_onChange: function () {
 		this.setState(this.feedState());
 	},
 
-	render: function() {
+	render: function () {
 		return (
 			<section>
 				<FeedSearchInput />
-				<section className = "feeds">
-					<FeedList selected = {this.state.currentFeed} feeds = {this.state.allFeeds}></FeedList>
-					<FeedContent content = {this.state.feedContent}></FeedContent>
+				<section className="feeds">
+					<FeedList selected={this.state.currentFeed} feeds={this.state.allFeeds}></FeedList>
+					<FeedContent content={this.state.feedContent}></FeedContent>
 				</section>
 				<ViewManager />
-				<div id = "modal-container"></div>
-				<div className = "backdrop"></div>
+
+				<div id="modal-container"></div>
+				<div className="backdrop"></div>
 			</section>
 		)
 	}

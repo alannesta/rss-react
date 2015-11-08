@@ -59,6 +59,14 @@ var FeedActions = {
 					});
 				}
 			})
+	},
+
+	toggleFeedActions: function(feed) {
+		AppDispatcher.dispatch({
+			actionType: 'TOGGLE_FEED_ACTIONS',
+			feed: feed,
+			showActions: !feed.showActions
+		})
 	}
 };
 

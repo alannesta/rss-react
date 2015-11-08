@@ -14,27 +14,32 @@ var FeedItem = React.createClass({
 
 	showActions: function () {
 		//console.log('mouseenter');
-		this.showAction = true;
+		FeedActions.toggleFeedActions(this.props.feed);
 	},
 
 	hideActions: function () {
 		//console.log('mouseLeft');
-		this.showAction = false;
+		FeedActions.toggleFeedActions(this.props.feed);
 	},
 
+
+
 	render: function () {
-		var view = this;
 		var selectedClass = classNames({
 			'selected': this.props.selected._id === this.props.feed._id,
-			'feed-nav-item': true,
-			'show-actions': view.showAction
+			'feed-nav-item': true
 		});
+
+		var feedAction = classNames({
+			'show-actions': this.props.feed.showActions
+		});
+
 		return (
 			<li className={selectedClass} onMouseOver={this.showActions}
-				onMouseOut={this.hideActions} onClick={this.selectFeed}>
-				{this.props.feed.name}
-				<section id="actions">
-					<span onClick={this.deleteFeed}>Delete</span>
+				onMouseOut={this.hideActions}>
+				<section id="content"  onClick={this.selectFeed}>{this.props.feed.name}</section>
+				<section id="actions" className={feedAction}>
+					<button onClick={this.deleteFeed}>Delete</button>
 				</section>
 			</li>
 			//<li onClick={FeedActions.selectFeed.bind(this, this.props.feed)}>{this.props.feed.name}</li>	// more straight forward
