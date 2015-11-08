@@ -6,7 +6,7 @@ var FeedContent = React.createClass({
 		var content = [];
 
 		this.props.content.forEach(function(item) {
-			content.push(<section><div>{item.title}</div><div>{item.contentSnippet}</div></section>);
+			content.push(<section><h2>{item.title}</h2><div>{item.contentSnippet}</div></section>);
 		});
 
 		return (
