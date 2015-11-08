@@ -28,7 +28,6 @@ var FeedModal = React.createClass({
 	},
 
 	componentWillUnmount: function() {
-		console.log('unmount, remove listener');
 		// this is actually never called if modal visibility is controlled by css class
 		ViewStore.removeChangeListener(this._onChange);
 	},

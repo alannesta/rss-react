@@ -51,6 +51,7 @@ var ViewManager = React.createClass({
 					break;
 			}
 		}else {
+			console.log('view manager unmount stuff');
 			$('body').removeClass('modal-shown');
 			ReactDOM.unmountComponentAtNode(document.getElementById('modal-container'));
 		}
