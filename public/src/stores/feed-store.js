@@ -4,9 +4,7 @@ var assign = require('object-assign');
 var request = require('superagent');
 var _ = require('underscore');
 
-
 var CHANGE_EVENT = 'change';
-
 
 var _feedsState = {
 	currentFeed: {},

@@ -1,5 +1,5 @@
 var React = require('react');
-var FeedItem = require('./feedItem');
+var FeedItem = require('./feed-item');
 
 var FeedList = React.createClass({
 

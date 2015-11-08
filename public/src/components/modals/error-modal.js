@@ -1,17 +1,18 @@
 var React = require('react');
-var ModalStore = require('../../stores/modal-store');
 var classNames = require('classnames');
 var ViewActions = require('../../actions/view-actions');
+var ViewStore = require('../../stores/view-store');
+
 
 
 var ErrorModal = React.createClass({
 
 	getInitialState: function() {
-		return ModalStore.getState();
+		return ViewStore.getState().modal;
 	},
 
 	modalState: function() {
-		return ModalStore.getState();
+		return ViewStore.getState().modal;
 	},
 
 	confirm: function() {
@@ -23,17 +24,16 @@ var ErrorModal = React.createClass({
 	},
 
 	componentDidMount: function() {
-		ModalStore.addChangeListener(this._onChange);
+		ViewStore.addChangeListener(this._onChange);
 	},
 
 	componentWillUnmount: function() {
 		// this is actually never called if modal visibility is controlled by css class
-		ModalStore.removeChangeListener(this._onChange);
+		ViewStore.removeChangeListener(this._onChange);
 	},
 
 	_onChange: function() {
 		this.setState(this.modalState());
-
 	},
 
 	render: function() {

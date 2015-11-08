@@ -32,10 +32,10 @@ var ViewManager = React.createClass({
 		var viewState = ViewStore.getState();
 
 		// TODO: modal type should also be in view state
-		if (viewState.modalShown) {
+		if (viewState.modal.modalShown) {
 			$('body').addClass('modal-shown');
 
-			var modalType = viewState.modalType;
+			var modalType = viewState.modal.modalType;
 			switch (modalType) {
 				case 'ADD_FEED':
 					ReactDOM.render(
@@ -54,7 +54,6 @@ var ViewManager = React.createClass({
 			$('body').removeClass('modal-shown');
 			ReactDOM.unmountComponentAtNode(document.getElementById('modal-container'));
 		}
-		this.setState(viewState);
 	},
 
 	render: function() {

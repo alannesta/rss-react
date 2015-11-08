@@ -6,8 +6,16 @@ var _ = require('underscore');
 var CHANGE_EVENT = 'change';
 
 var _viewState = {
-	modalShown: false,
-	modalType: ''
+	modal: {
+		modalShown: false,
+		modalType: '',
+		modalContent: {}
+	},
+
+	toast: {
+		toastShown: false,
+		toastContent: ''
+	}
 };
 
 var ViewStore = _.extend({}, EventEmitter.prototype, {
@@ -23,8 +31,8 @@ var ViewStore = _.extend({}, EventEmitter.prototype, {
 		this.on(CHANGE_EVENT, callback);
 	},
 
-	removeChangeListener: function() {
-		this.removeListener(CHANGE_EVENT);
+	removeChangeListener: function(callback) {
+		this.removeListener(CHANGE_EVENT, callback);
 	}
 });
 
@@ -32,13 +40,14 @@ var ViewStore = _.extend({}, EventEmitter.prototype, {
 AppDispatcher.register(function(action) {
 	switch(action.actionType) {
 		case 'SHOW_MODAL':
-			_viewState.modalShown = true;
-			_viewState.modalType = action.modalType;
+			_viewState.modal.modalShown = true;
+			_viewState.modal.modalType = action.modalType;
+			_viewState.modal.modalContent = action.content;
 			ViewStore.emitChange();
 			break;
 
 		case 'CLOSE_MODAL':
-			_viewState.modalShown = false;
+			_viewState.modal.modalShown = false;
 			ViewStore.emitChange();
 			break;
 	}
