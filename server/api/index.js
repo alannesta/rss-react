@@ -31,4 +31,15 @@ router.post('/feed', function(req, res) {
 	});
 });
 
+router.delete('/feed/:id', function(req, res) {
+	console.log('url params: ' + id);
+	Feeds.find({_id: id}, function(err, docs) {
+		if (!err) {
+			console.log(docs);
+			res.json(docs);
+		}
+	});
+});
+
+
 module.exports = router;

@@ -10,6 +10,7 @@ var FeedItem = React.createClass({
 
 	deleteFeed: function () {
 		console.log('delete feed');
+		FeedActions.deleteFeed(this.props.feed);
 	},
 
 	showActions: function () {

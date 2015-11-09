@@ -61,6 +61,13 @@ var FeedActions = {
 			})
 	},
 
+	deleteFeed: function(feed) {
+		request.del('/api/feed/' + feed._id)
+			.end(function(err, res) {
+				console.log(res);
+			});
+	},
+
 	toggleFeedActions: function(feed) {
 		AppDispatcher.dispatch({
 			actionType: 'TOGGLE_FEED_ACTIONS',

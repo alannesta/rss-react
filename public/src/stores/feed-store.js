@@ -36,7 +36,7 @@ var FeedStore = _.extend(feed_mixin, {
 AppDispatcher.register(function(action) {
 	switch(action.actionType) {
 		case 'SELECT_FEED':
-			_feedsState.currentFeed.feed = action.feed;
+			_feedsState.currentFeed = action.feed;
 			_feedsState.feedContent = action.content;
 			FeedStore.emitChange();
 			break;
