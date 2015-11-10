@@ -62,9 +62,11 @@ var FeedActions = {
 	},
 
 	deleteFeed: function(feed) {
+		var actions = this;
 		request.del('/api/feed/' + feed._id)
 			.end(function(err, res) {
 				console.log(res);
+				actions.fetch();
 			});
 	},
 
