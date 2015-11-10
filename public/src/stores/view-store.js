@@ -15,6 +15,13 @@ var _viewState = {
 	toast: {
 		toastShown: false,
 		toastContent: ''
+	},
+
+	spinner: {
+		spinnerTypes: [],
+		containers: {
+			CONTENT_LOADING: 'content-spinner'		// for feed content
+		}
 	}
 };
 
@@ -48,6 +55,20 @@ AppDispatcher.register(function(action) {
 
 		case 'CLOSE_MODAL':
 			_viewState.modal.modalShown = false;
+			ViewStore.emitChange();
+			break;
+
+		case 'CONTENT_LOADING':
+			_viewState.spinner.spinnerTypes.push(action.spinnerType);
+			ViewStore.emitChange();
+
+			break;
+
+		// content loaded
+		case 'SELECT_FEED':
+			var idx = _viewState.spinner.spinnerTypes.indexOf('CONTENT_LOADING');
+			_viewState.spinner.spinnerTypes.splice(idx, 1);
+			console.log(_viewState.spinner.spinnerTypes);
 			ViewStore.emitChange();
 			break;
 	}

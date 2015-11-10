@@ -13,6 +13,10 @@ var FeedActions = {
 	},
 
 	selectFeed: function(feed) {
+		AppDispatcher.dispatch({
+			actionType: 'CONTENT_LOADING',
+			spinnerType: 'CONTENT_LOADING'
+		});
 		FeedUtil.loadFeed(feed.feedUrl).then(function(content) {
 			AppDispatcher.dispatch({
 				actionType: 'SELECT_FEED',

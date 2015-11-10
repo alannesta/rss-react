@@ -3,6 +3,7 @@ var ReactDOM = require('react-dom');
 var FeedActions = require('../actions/feed-actions');
 var FeedModal = require('./modals/feed-modal');
 var ErrorModal = require('./modals/error-modal');
+var Spinner = require('./spinners/spinner');
 
 var ViewStore = require('../stores/view-store');
 var $ = require('jquery');
@@ -55,6 +56,27 @@ var ViewManager = React.createClass({
 			$('body').removeClass('modal-shown');
 			ReactDOM.unmountComponentAtNode(document.getElementById('modal-container'));
 		}
+
+		if (viewState.spinner.spinnerTypes.length > 0) {
+			var spinnerTypes = viewState.spinner.spinnerTypes;
+			spinnerTypes.forEach(function(spinnerType) {
+				ReactDOM.render(
+					<Spinner />,
+					document.getElementById(viewState.spinner.containers[spinnerType])
+				)
+			})
+
+		} else {
+			//viewState.spinner.containers.forEach(function(container) {
+			//	ReactDOM.unmountComponentAtNode(document.getElementById(container));
+			//});
+			for (var key in viewState.spinner.containers) {
+				ReactDOM.unmountComponentAtNode(document.getElementById(viewState.spinner.containers[key]));
+			}
+		}
+
+
+
 	},
 
 	render: function() {

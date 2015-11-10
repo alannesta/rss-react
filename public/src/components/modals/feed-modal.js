@@ -5,6 +5,7 @@ var ViewStore = require('../../stores/view-store');
 
 var FeedModal = React.createClass({
 
+	// should be stateless (not interacting with stores). Only controller views should subscribe to store changes
 	getInitialState: function() {
 		return ViewStore.getState().modal;
 	},
