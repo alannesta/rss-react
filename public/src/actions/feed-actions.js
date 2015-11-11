@@ -4,11 +4,14 @@ var FeedUtil = require('../feedUtil');
 
 var FeedActions = {
 	fetch: function() {
+		var actions = this;
 		request.get('/api/feeds').end(function(error, res) {
 			AppDispatcher.dispatch({
 				actionType: 'FEEDS_INIT',
 				feeds: res.body
 			});
+
+			actions.selectFeed(res.body[0]);
 		});
 	},
 

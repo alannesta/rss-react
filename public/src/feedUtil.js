@@ -1,12 +1,16 @@
 var q = require('Q');
 
 var FeedUtil = {
-	loadFeed : function (url) {
+	loadFeed : function (url, lastDefer) {
+		var deferred = lastDefer? lastDefer: q.defer();
 		if (!this.apiLoaded) {
-			alert('api not loaded, please try again later');
-			return;
+			setTimeout(function() {
+				console.log('retry');
+				FeedUtil.loadFeed(url, deferred);
+			}, 1500);
+			return deferred.promise;
 		}
-		var deferred = q.defer();
+
 		var feed = new google.feeds.Feed(url);
 		feed.setNumEntries(10);
 
