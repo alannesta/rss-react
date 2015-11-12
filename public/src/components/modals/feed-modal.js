@@ -1,7 +1,6 @@
 var React = require('react');
 var classNames = require('classnames');
 var ViewActions = require('../../actions/view-actions');
-var ViewStore = require('../../stores/view-store');
 
 var FeedModal = React.createClass({
 
