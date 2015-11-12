@@ -40,13 +40,13 @@ var ViewManager = React.createClass({
 			switch (modalType) {
 				case 'ADD_FEED':
 					ReactDOM.render(
-						<FeedModal onConfirm = {FeedActions.subscribeFeed.bind(FeedActions)} />,
+						<FeedModal content = {viewState.modal.modalContent} onConfirm = {FeedActions.subscribeFeed.bind(FeedActions)} />,
 						document.getElementById('modal-container')
 					);
 					break;
 				case 'ERROR':
 					ReactDOM.render(
-						<ErrorModal />,
+						<ErrorModal content = {viewState.modal.modalContent} />,
 						document.getElementById('modal-container')
 					);
 					break;
@@ -67,16 +67,10 @@ var ViewManager = React.createClass({
 			})
 
 		} else {
-			//viewState.spinner.containers.forEach(function(container) {
-			//	ReactDOM.unmountComponentAtNode(document.getElementById(container));
-			//});
 			for (var key in viewState.spinner.containers) {
 				ReactDOM.unmountComponentAtNode(document.getElementById(viewState.spinner.containers[key]));
 			}
 		}
-
-
-
 	},
 
 	render: function() {

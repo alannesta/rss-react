@@ -3,16 +3,8 @@ var classNames = require('classnames');
 var ViewActions = require('../../actions/view-actions');
 var ViewStore = require('../../stores/view-store');
 
-
-
 var ErrorModal = React.createClass({
 
-	getInitialState: function() {
-		return ViewStore.getState().modal;
-	},
-	confirm: function() {
-
-	},
 	close: function() {
 		ViewActions.closeModal();
 	},
@@ -21,7 +13,7 @@ var ErrorModal = React.createClass({
 		return (
 			<section className = "add-feed-modal">
 				<section>
-					{this.state.modalContent}
+					{this.props.content}
 				</section>
 				<section>
 					<button onClick = {this.close}>Cancel</button>

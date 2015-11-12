@@ -5,14 +5,9 @@ var ViewStore = require('../../stores/view-store');
 
 var FeedModal = React.createClass({
 
-	// should be stateless (not interacting with stores). Only controller views should subscribe to store changes
-	getInitialState: function() {
-		return ViewStore.getState().modal;
-	},
-
 	confirm: function() {
 		console.log(this.props);
-		this.props.onConfirm(this.state.modalContent);
+		this.props.onConfirm(this.props.content);
 		ViewActions.closeModal();
 	},
 
@@ -24,7 +19,7 @@ var FeedModal = React.createClass({
 		return (
 			<section className = "add-feed-modal">
 				<section>
-					Are you sure you want to subscribe to {this.state.modalContent.name}?
+					Are you sure you want to subscribe to {this.props.content.name}?
 				</section>
 				<section>
 					<button onClick = {this.confirm}>Confirm</button>
