@@ -11,7 +11,7 @@ var FeedUtil = {
 			return deferred.promise;
 		}
 
-		var feed = new google.feeds.Feed(url);
+		var feed = new window.google.feeds.Feed(url);
 		feed.setNumEntries(10);
 
 		feed.load(function (result) {
@@ -29,7 +29,7 @@ var FeedUtil = {
 			return;
 		}
 		var deferred = q.defer();
-		var feed = new google.feeds.Feed(url);
+		var feed = new window.google.feeds.Feed(url);
 
 		feed.load(function (result) {
 			if (!result.error) {
@@ -46,7 +46,7 @@ var FeedUtil = {
 	}
 };
 
-google.load("feeds", "1");
-google.setOnLoadCallback(FeedUtil._onApiLoad.bind(FeedUtil));
+window.google.load("feeds", "1");
+window.google.setOnLoadCallback(FeedUtil._onApiLoad.bind(FeedUtil));
 
 module.exports = FeedUtil;

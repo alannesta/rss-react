@@ -36,8 +36,8 @@ var FeedItem = React.createClass({
 		});
 
 		return (
-			<li className={selectedClass} onMouseOver={this.showActions}
-				onMouseOut={this.hideActions}>
+			<li className={selectedClass} onMouseEnter={this.showActions}
+				onMouseLeave={this.hideActions}>
 				<section id="content"  onClick={this.selectFeed}>{this.props.feed.name}</section>
 				<section id="actions" className={feedAction}>
 					<button onClick={this.deleteFeed}>Delete</button>
