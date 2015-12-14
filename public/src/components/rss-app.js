@@ -14,7 +14,7 @@ var app = React.createClass({
 	},
 
 	getInitialState: function () {
-		return this.feedState()
+		return this.feedState();
 	},
 
 	componentDidMount: function () {

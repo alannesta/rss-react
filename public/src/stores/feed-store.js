@@ -1,7 +1,6 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
-var request = require('superagent');
 var _ = require('underscore');
 
 var CHANGE_EVENT = 'change';
