@@ -18,7 +18,9 @@ var app = React.createClass({
 	},
 
 	componentDidMount: function () {
-		FeedAction.fetch();	// is this the place?
+		FeedAction.fetch().then(function(data) {
+			FeedAction.selectFeed(data[0]);
+		});
 		FeedStore.addChangeListener(this._onChange);
 	},
 

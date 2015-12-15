@@ -1,17 +1,16 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
-var request = require('superagent');
 var FeedUtil = require('../feedUtil');
 
 var FeedActions = {
 	fetch: function() {
-		var actions = this;
-		request.get('/api/feeds').end(function(error, res) {
+		return fetch('/api/feeds').then(function(res) {
+			return res.json()
+		}).then(function(data) {
 			AppDispatcher.dispatch({
 				actionType: 'FEEDS_INIT',
-				feeds: res.body
+				feeds: data
 			});
-
-			actions.selectFeed(res.body[0]);
+			return data;
 		});
 	},
 
@@ -52,29 +51,44 @@ var FeedActions = {
 
 	subscribeFeed: function(feed) {
 		var actions = this;
-		console.log('subscribed');
-		request.post('/api/feed')
-			.send(feed)
-			.end(function(err, res) {
-				// refresh the feed list when success
-				actions.fetch();
-				if (err) {
-					AppDispatcher.dispatch({
-						actionType: 'SHOW_MODAL',
-						content: 'Fail to subscribe to feed',
-						modalType: 'ERROR'
-					});
-				}
+		return fetch('/api/feed', {
+			method: 'post',
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				name: feed.name,
+				feedUrl: feed.feedUrl
 			})
+		}).then(function (res) {
+			if (res.status == 200) {
+				actions.fetch().then(actions.selectFeed.bind(actions, feed))
+			} else {
+				AppDispatcher.dispatch({
+					actionType: 'SHOW_MODAL',
+					content: 'Fail to subscribe to feed',
+					modalType: 'ERROR'
+				});
+			}
+		})
+
 	},
 
 	deleteFeed: function(feed) {
 		var actions = this;
-		request.del('/api/feed/' + feed._id)
-			.end(function(err, res) {
-				console.log(res);
+		return fetch('/api/feed/' + feed._id, {
+			method: 'delete'
+		}).then(function(res) {
+			if (res.status !== 200) {
 				actions.fetch();
-			});
+				AppDispatcher.dispatch({
+					actionType: 'SHOW_MODAL',
+					content: 'Fail to delete feed',
+					modalType: 'ERROR'
+				});
+			}
+		});
 	},
 
 	toggleFeedActions: function(feed) {

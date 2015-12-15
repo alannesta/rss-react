@@ -68,7 +68,6 @@ AppDispatcher.register(function(action) {
 		case 'SELECT_FEED':
 			var idx = _viewState.spinner.spinnerTypes.indexOf('CONTENT_LOADING');
 			_viewState.spinner.spinnerTypes.splice(idx, 1);
-			console.log(_viewState.spinner.spinnerTypes);
 			ViewStore.emitChange();
 			break;
 	}
