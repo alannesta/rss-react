@@ -1,9 +1,9 @@
-google = jest.genMockFunction();
-google.load = jest.genMockFunction();
-google.setOnLoadCallback = jest.genMockFn();
-google.feeds = jest.genMockFunction().mockImplementation(function() {
-	return {Feed: 'kaka'};
-});
+//google = jest.genMockFunction();
+//google.load = jest.genMockFunction();
+//google.setOnLoadCallback = jest.genMockFn();
+//google.feeds = jest.genMockFunction().mockImplementation(function() {
+//	return {Feed: 'kaka'};
+//});
 
 //fetch = jest.genMockFunction().mockImplementation(function() {
 //	return Promise.resolve();
@@ -13,6 +13,7 @@ jest.autoMockOff();
 jest.dontMock('../rss-app');
 jest.mock('../../actions/feed-actions');
 jest.mock('../../stores/feed-store');
+jest.mock('../../utils/feed-util');
 
 var RssApp = require('../rss-app');
 var FeedActions = require('../../actions/feed-actions');

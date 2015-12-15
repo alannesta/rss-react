@@ -1,5 +1,5 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
-var FeedUtil = require('../feedUtil');
+var FeedUtil = require('../utils/feed-util');
 
 var FeedActions = {
 	fetch: function() {
@@ -44,7 +44,6 @@ var FeedActions = {
 				actionType: 'SHOW_MODAL',
 				content: 'Could not find feed, check your URL',
 				modalType: 'ERROR'
-
 			})
 		})
 	},

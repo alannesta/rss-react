@@ -1,21 +1,10 @@
-google = jest.genMockFunction();
-google.load = jest.genMockFunction();
-google.setOnLoadCallback = jest.genMockFn();
-google.feeds = jest.genMockFunction().mockImplementation(function() {
-	return {Feed: 'kaka'};
-});
-
 jest.dontMock('../feed-item');
 jest.dontMock('classnames');
 //jest.dontMock('../../actions/feed-actions');
-//jest.dontMock('../../feedUtil');
 
 var React = require('react');
 var ReactDOM = require('react-dom');
 var TestUtils = require('react-addons-test-utils');
-//import React from 'react';
-//import ReactDOM from 'react-dom';
-//import TestUtils from 'react-addons-test-utils';
 
 var FeedItem = require('../feed-item');
 var FeedActions = require('../../actions/feed-actions');

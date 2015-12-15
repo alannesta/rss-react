@@ -1,13 +1,5 @@
-google = jest.genMockFunction();
-google.load = jest.genMockFunction();
-google.setOnLoadCallback = jest.genMockFn();
-google.feeds = jest.genMockFunction().mockImplementation(function() {
-	return {Feed: 'kaka'};
-});
-
 jest.autoMockOff();
-//jest.dontMock('../feed-store');
-//jest.dontMock('../../actions/feed-actions');
+jest.mock('../../utils/feed-util');
 
 //var FeedActions = require('../../actions/feed-actions');
 var Dispatcher = require('../../dispatcher/AppDispatcher');
