@@ -63,31 +63,40 @@ var FeedActions = {
 			})
 		}).then(function (res) {
 			if (res.status == 200) {
-				actions.fetch().then(actions.selectFeed.bind(actions, feed))
-			} else {
+				return res.json();
+			}else {
 				AppDispatcher.dispatch({
 					actionType: 'SHOW_MODAL',
 					content: 'Fail to subscribe to feed',
 					modalType: 'ERROR'
 				});
+				return res.json().then(Promise.reject.bind(Promise));
 			}
-		})
+		}).then(function(feed) {
+			actions.fetch().then(actions.selectFeed.bind(actions, feed))
+		});
 
 	},
 
-	deleteFeed: function(feed) {
+	deleteFeed: function(feed, reselect) {
 		var actions = this;
 		return fetch('/api/feed/' + feed._id, {
 			method: 'delete'
 		}).then(function(res) {
 			if (res.status !== 200) {
-				actions.fetch();
 				AppDispatcher.dispatch({
 					actionType: 'SHOW_MODAL',
 					content: 'Fail to delete feed',
 					modalType: 'ERROR'
 				});
 			}
+
+			actions.fetch().then(function(data) {
+				if (reselect) {
+					actions.selectFeed(data[0]);
+				}
+			});
+
 		});
 	},
 

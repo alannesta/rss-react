@@ -9,17 +9,15 @@ var FeedItem = React.createClass({
 	},
 
 	deleteFeed: function () {
-		console.log('delete feed');
-		FeedActions.deleteFeed(this.props.feed);
+		var reselectFlag = this.props.selected._id === this.props.feed._id;
+		FeedActions.deleteFeed(this.props.feed, reselectFlag);
 	},
 
 	showActions: function () {
-		//console.log('mouseenter');
 		FeedActions.toggleFeedActions(this.props.feed);
 	},
 
 	hideActions: function () {
-		//console.log('mouseLeft');
 		FeedActions.toggleFeedActions(this.props.feed);
 	},
 
