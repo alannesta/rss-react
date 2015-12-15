@@ -56,7 +56,8 @@
       "./node_modules/fbjs"
     ],
     "globals": {
-      "google": {}
+      "google": {},
+      "fetch": {}
     }
   },
   "author": "Alan",

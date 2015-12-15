@@ -68,7 +68,7 @@ describe('Feed Item Test', function() {
 		TestUtils.Simulate.click(
 			deleteButton
 		);
-		expect(FeedActions.deleteFeed).toBeCalledWith(mockFeed);
+		expect(FeedActions.deleteFeed).toBeCalledWith(mockFeed, true);
 		//console.log(feedItem.props);
 
 	})

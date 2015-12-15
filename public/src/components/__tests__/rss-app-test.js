@@ -5,6 +5,10 @@ google.feeds = jest.genMockFunction().mockImplementation(function() {
 	return {Feed: 'kaka'};
 });
 
+//fetch = jest.genMockFunction().mockImplementation(function() {
+//	return Promise.resolve();
+//});
+
 jest.autoMockOff();
 jest.dontMock('../rss-app');
 jest.mock('../../actions/feed-actions');
