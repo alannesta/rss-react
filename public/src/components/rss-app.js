@@ -5,6 +5,7 @@ var FeedAction = require('../actions/feed-actions');
 var FeedList = require('./feed-list');
 var FeedContent = require('./feed-content');
 var FeedSearchInput = require('./feed-search-input');
+var Toast = require('./toasts/toast');
 var ViewManager = require('./view-manager');
 
 var app = React.createClass({
@@ -43,16 +44,12 @@ var app = React.createClass({
 
 	render: function () {
 		return (
-			<section>
+			<section className = "app-container">
 				<FeedSearchInput />
 				<section className="feeds">
 					<FeedList selected={this.state.currentFeed} feeds={this.state.allFeeds}></FeedList>
 					<FeedContent content={this.state.feedContent}></FeedContent>
 				</section>
-				<ViewManager />
-
-				<div id="modal-container"></div>
-				<div className="backdrop"></div>
 			</section>
 		)
 	}

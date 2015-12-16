@@ -17,6 +17,7 @@
     "object-assign": "^1.0.0",
     "q": "^1.4.1",
     "react": "^0.14.3",
+    "react-addons-css-transition-group": "^0.14.3",
     "react-dom": "^0.14.3",
     "underscore": "^1.8.3"
   },
