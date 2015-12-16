@@ -1,5 +1,6 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var FeedUtil = require('../utils/feed-util');
+var ViewActions = require('./view-actions');
 
 var FeedActions = {
 	fetch: function() {
@@ -89,7 +90,7 @@ var FeedActions = {
 					modalType: 'ERROR'
 				});
 			}
-
+			ViewActions.showToast('Feed Deleted Successfully');
 			actions.fetch().then(function(data) {
 				if (reselect) {
 					actions.selectFeed(data[0]);

@@ -70,6 +70,12 @@ AppDispatcher.register(function(action) {
 			_viewState.spinner.spinnerTypes.splice(idx, 1);
 			ViewStore.emitChange();
 			break;
+
+		case 'SHOW_TOAST':
+			_viewState.toast.toastShown = true;
+			_viewState.toast.toastContent = action.content;
+			ViewStore.emitChange();
+			break;
 	}
 });
 

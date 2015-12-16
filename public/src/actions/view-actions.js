@@ -5,6 +5,13 @@ var ViewActions = {
 		AppDispatcher.dispatch({
 			actionType: 'CLOSE_MODAL'
 		});
+	},
+
+	showToast: function(content) {
+		AppDispatcher.dispatch({
+			actionType: 'SHOW_TOAST',
+			content: content
+		})
 	}
 };
 
