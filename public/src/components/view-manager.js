@@ -1,5 +1,7 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
+var ReactCSSTransitionGroup = require('react-addons-css-transition-group');
+
 var FeedActions = require('../actions/feed-actions');
 var FeedModal = require('./modals/feed-modal');
 var ErrorModal = require('./modals/error-modal');
@@ -42,7 +44,21 @@ var ViewManager = React.createClass({
 		}
 	},
 
+	appendToast: function() {
+		var container = this.refs.manager.getElementsByTagName('section')[0];
+		ReactDOM.render(
+			<Toast toast = {this.state.toast}/>,
+			container
+		);
+	},
+
+	removeToast: function() {
+		var container = this.refs.manager.getElementsByTagName('section')[0];
+		ReactDOM.unmountComponentAtNode(container);
+	},
+
 	_onChange: function() {
+
 		var viewState = ViewStore.getState();
 		this.setState(viewState);
 
@@ -67,13 +83,21 @@ var ViewManager = React.createClass({
 		}else {
 			this.removeModal();
 		}
+
+		if (viewState.toast.toastShown) {
+			this.appendToast();
+		}else {
+			this.removeToast();
+		}
 	},
 
 	render: function() {
 		return (
-			<Toast toast = {this.state.toast} />
+			<section ref = "manager" className = "toast-container">
+				<ReactCSSTransitionGroup transitionName="toast" transitionEnterTimeout={2500} transitionLeaveTimeout={300} component="section">
+				</ReactCSSTransitionGroup>
+			</section>
 		);
-		//return null;	// not rendering any DOM elements
 	}
 });
 
