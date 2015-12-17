@@ -1,6 +1,5 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
-var ReactCSSTransitionGroup = require('react-addons-css-transition-group');
 
 var FeedActions = require('../actions/feed-actions');
 var FeedModal = require('./modals/feed-modal');
@@ -9,6 +8,7 @@ var Spinner = require('./spinners/spinner');
 var Toast = require('./toasts/toast');
 
 var ViewStore = require('../stores/view-store');
+var _ = require('underscore');
 var $ = require('jquery');
 
 var ViewManager = React.createClass({
@@ -18,6 +18,10 @@ var ViewManager = React.createClass({
 	},
 
 	componentDidMount: function() {
+		this.myStateCache = _.extend({}, ViewStore.getState());
+		Object.observe(this.myStateCache, function(changes) {
+			console.log('changed !!!  ', changes);
+		});
 		ViewStore.addChangeListener(this._onChange);
 	},
 
@@ -44,12 +48,15 @@ var ViewManager = React.createClass({
 		}
 	},
 
-	appendToast: function() {
-		var container = this.refs.manager.getElementsByTagName('section')[0];
-		ReactDOM.render(
+	showToast: function() {
+		var container = $("<div id='toast-container'></div>");
+		$('body').append(container);
+		var toast = ReactDOM.render(
 			<Toast toast = {this.state.toast}/>,
-			container
+			container[0]
 		);
+
+		console.log(toast.refs.toastContent);
 	},
 
 	removeToast: function() {
@@ -58,12 +65,9 @@ var ViewManager = React.createClass({
 	},
 
 	_onChange: function() {
-
 		var viewState = ViewStore.getState();
 		this.setState(viewState);
-
-		// TODO: modal type should also be in view state
-		if (viewState.modal.modalShown) {
+		if (!this.myStateCache.modal.modalShown && viewState.modal.modalShown) {
 			this.appendModal();
 			var modalType = viewState.modal.modalType;
 			switch (modalType) {
@@ -84,20 +88,17 @@ var ViewManager = React.createClass({
 			this.removeModal();
 		}
 
-		if (viewState.toast.toastShown) {
-			this.appendToast();
-		}else {
-			this.removeToast();
+		if (!this.myStateCache.toast.toastShown && viewState.toast.toastShown) {
+			this.showToast();
 		}
+
+		this.myStateCache = _.extend({}, viewState);
+		//this.stateCache = viewState;
+
 	},
 
 	render: function() {
-		return (
-			<section ref = "manager" className = "toast-container">
-				<ReactCSSTransitionGroup transitionName="toast" transitionEnterTimeout={2500} transitionLeaveTimeout={300} component="section">
-				</ReactCSSTransitionGroup>
-			</section>
-		);
+		return null;
 	}
 });
 

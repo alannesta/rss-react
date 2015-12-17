@@ -80,18 +80,22 @@ section
     border: 2px solid lightblue
     font-style: italic
     font-weight: bolder
+    animation: fadeInsideOut 2s
 
-.toast-enter
-  opacity: 0.01
 
-.toast-enter.toast-enter-active
-  opacity: 1
-  transition: opacity 2500ms ease-in
+@keyframes fadeInsideOut
+  0%
+    opacity: 0
+    -webkit-transform: translateX(-20px)
+  25%
+    opacity: 1
+    -webkit-transform: translateX(0)
 
-.toast-leave
-  opacity: 1
+  75%
+    opacity: 1
+    -webkit-transform: translateX(0)
 
-.toast-leave.toast-leave-active
-  opacity: 0.01
-  transition: opacity 300ms ease-in
+  100%
+    opacity: 0
+    -webkit-transform: translateX(20px)
 

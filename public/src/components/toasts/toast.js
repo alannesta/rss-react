@@ -5,7 +5,7 @@ var Toast = React.createClass({
 	render: function() {
 
 		return (
-			<section className = "toast-content">
+			<section ref = "toastContent" className = "toast-content">
 				{this.props.toast.toastContent}
 			</section>
 		)
