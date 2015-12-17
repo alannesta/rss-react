@@ -2,12 +2,15 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 
 var FeedActions = require('../actions/feed-actions');
+var ViewActions = require('../actions/view-actions');
 var FeedModal = require('./modals/feed-modal');
 var ErrorModal = require('./modals/error-modal');
 var Spinner = require('./spinners/spinner');
 var Toast = require('./toasts/toast');
 
 var ViewStore = require('../stores/view-store');
+var cacheFactory = require('../utils/state-cache');
+
 var _ = require('underscore');
 var $ = require('jquery');
 
@@ -18,10 +21,7 @@ var ViewManager = React.createClass({
 	},
 
 	componentDidMount: function() {
-		this.myStateCache = _.extend({}, ViewStore.getState());
-		Object.observe(this.myStateCache, function(changes) {
-			console.log('changed !!!  ', changes);
-		});
+		cacheFactory.setCache(JSON.stringify(ViewStore.getState()));
 		ViewStore.addChangeListener(this._onChange);
 	},
 
@@ -49,6 +49,7 @@ var ViewManager = React.createClass({
 	},
 
 	showToast: function() {
+		//var manager = this;
 		var container = $("<div id='toast-container'></div>");
 		$('body').append(container);
 		var toast = ReactDOM.render(
@@ -56,18 +57,25 @@ var ViewManager = React.createClass({
 			container[0]
 		);
 
-		console.log(toast.refs.toastContent);
+		toast.refs.toastContent.addEventListener('animationend', function(e) {
+			console.log('animation end, time used: ' + e.elapsedTime);
+			ViewActions.hideToast();
+		})
 	},
 
 	removeToast: function() {
-		var container = this.refs.manager.getElementsByTagName('section')[0];
-		ReactDOM.unmountComponentAtNode(container);
+		var container = document.getElementById('toast-container');
+		if (container !== null) {
+			ReactDOM.unmountComponentAtNode(container);
+			$('body')[0].removeChild(container);
+		}
 	},
 
 	_onChange: function() {
+		console.log('store changed', cacheFactory.getCache());
 		var viewState = ViewStore.getState();
 		this.setState(viewState);
-		if (!this.myStateCache.modal.modalShown && viewState.modal.modalShown) {
+		if (!cacheFactory.getCache().modal.modalShown && viewState.modal.modalShown) {
 			this.appendModal();
 			var modalType = viewState.modal.modalType;
 			switch (modalType) {
@@ -87,14 +95,13 @@ var ViewManager = React.createClass({
 		}else {
 			this.removeModal();
 		}
-
-		if (!this.myStateCache.toast.toastShown && viewState.toast.toastShown) {
+		if (!cacheFactory.getCache().toast.toastShown && viewState.toast.toastShown) {
 			this.showToast();
+		}else if (cacheFactory.getCache().toast.toastShown && !viewState.toast.toastShown){
+			console.log('remove');
+			this.removeToast();
 		}
-
-		this.myStateCache = _.extend({}, viewState);
-		//this.stateCache = viewState;
-
+		cacheFactory.setCache(JSON.stringify(viewState));
 	},
 
 	render: function() {

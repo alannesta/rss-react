@@ -6,7 +6,6 @@ var FeedList = require('./feed-list');
 var FeedContent = require('./feed-content');
 var FeedSearchInput = require('./feed-search-input');
 var Toast = require('./toasts/toast');
-var ViewManager = require('./view-manager');
 
 var app = React.createClass({
 

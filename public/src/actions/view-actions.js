@@ -12,6 +12,12 @@ var ViewActions = {
 			actionType: 'SHOW_TOAST',
 			content: content
 		})
+	},
+
+	hideToast: function() {
+		AppDispatcher.dispatch({
+			actionType: 'HIDE_TOAST'
+		})
 	}
 };
 

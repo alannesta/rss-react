@@ -76,6 +76,10 @@ AppDispatcher.register(function(action) {
 			_viewState.toast.toastContent = action.content;
 			ViewStore.emitChange();
 			break;
+		case 'HIDE_TOAST':
+			_viewState.toast.toastShown = false;
+			ViewStore.emitChange();
+			break;
 	}
 });
 
