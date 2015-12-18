@@ -92,7 +92,7 @@ var ViewManager = React.createClass({
 					);
 					break;
 			}
-		}else {
+		}else if (cacheFactory.getCache().modal.modalShown) {
 			this.removeModal();
 		}
 		if (!cacheFactory.getCache().toast.toastShown && viewState.toast.toastShown) {
