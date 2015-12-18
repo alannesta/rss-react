@@ -5,7 +5,7 @@ function cacheFactory() {
 
 	this.setCache = function(cache) {
 		//_cache = Object.assign({}, cache);
-		_cache = cache
+		_cache = JSON.stringify(cache);
 	},
 
 	this.getCache = function() {

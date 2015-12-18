@@ -7,6 +7,7 @@ var FeedModal = require('./modals/feed-modal');
 var ErrorModal = require('./modals/error-modal');
 var Spinner = require('./spinners/spinner');
 var Toast = require('./toasts/toast');
+var ToastList = require('./toasts/toast-list');
 
 var ModalStore = require('../stores/modal-store');
 var ToastStore = require('../stores/toast-store');
@@ -21,6 +22,8 @@ var ViewManager = React.createClass({
 	},
 
 	componentDidMount: function() {
+		cacheFactory.setCache(ToastStore.getState());
+		this.cachedToastState = cacheFactory.getCache();
 		ModalStore.addChangeListener(this._onModalChange);
 		ToastStore.addChangeListener(this._onToastChange);
 	},
@@ -50,18 +53,17 @@ var ViewManager = React.createClass({
 	},
 
 	showToast: function() {
-		//var manager = this;
 		var container = $("<div id='toast-container'></div>");
 		$('body').append(container);
 		var toast = ReactDOM.render(
-			<Toast toast = {this.state.toast}/>,
+			<ToastList />,
 			container[0]
 		);
 
-		toast.refs.toastContent.addEventListener('animationend', function(e) {
-			console.log('animation end, time used: ' + e.elapsedTime);
-			ViewActions.hideToast();
-		})
+		//toast.refs.toastContent.addEventListener('animationend', function(e) {
+		//	console.log('animation end, time used: ' + e.elapsedTime);
+		//	ViewActions.hideToast();
+		//})
 	},
 
 	removeToast: function() {
@@ -100,12 +102,13 @@ var ViewManager = React.createClass({
 	_onToastChange: function() {
 		console.log('toast changed');
 		var ToastState = ToastStore.getState();
-		this.setState(ToastState);
-		if (ToastState.toastShown) {
+		if (this.cachedToastState.toasts.length === 0 && ToastState.toasts.length > 0) {
 			this.showToast();
-		}else{
+		}else if (ToastState.toasts.length === 0){
 			this.removeToast();
 		}
+		cacheFactory.setCache(ToastStore.getState());
+		this.cachedToastState = cacheFactory.getCache();
 	},
 
 	render: function() {

@@ -4,13 +4,14 @@ var EventEmitter = require('events').EventEmitter;
 var CHANGE_EVENT = 'change';
 
 var _toastState = {
-	toastShown: false,
-	toastContent: ''
+	toasts: []
 };
+
+
 
 var ToastStore = Object.assign({}, EventEmitter.prototype, {
 	getState: function() {
-		return _toastState;
+		return Object.assign({}, _toastState);
 	},
 
 	emitChange: function() {
@@ -30,12 +31,13 @@ var ToastStore = Object.assign({}, EventEmitter.prototype, {
 AppDispatcher.register(function(action) {
 	switch(action.actionType) {
 		case 'SHOW_TOAST':
-			_toastState.toastShown = true;
-			_toastState.toastContent = action.content;
+			_toastState.toasts.push({
+				toastContent: action.content
+			});
 			ToastStore.emitChange();
 			break;
 		case 'HIDE_TOAST':
-			_toastState.toastShown = false;
+			_toastState.toasts = [];
 			ToastStore.emitChange();
 			break;
 	}

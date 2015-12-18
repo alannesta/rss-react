@@ -2,6 +2,11 @@ var React = require('react');
 
 var Toast = React.createClass({
 
+	//shouldComponentUpdate: function() {
+	//	//TODO: do not update if in animation
+	//	//return false;
+	//},
+
 	render: function() {
 
 		return (
