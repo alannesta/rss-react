@@ -56,7 +56,7 @@ var ViewManager = React.createClass({
 		var container = $("<div id='toast-container'></div>");
 		$('body').append(container);
 		var toast = ReactDOM.render(
-			<ToastList />,
+			<ToastList onAnimationEnd = {ViewActions.hideToast}/>,
 			container[0]
 		);
 
@@ -75,7 +75,6 @@ var ViewManager = React.createClass({
 	},
 
 	_onModalChange: function() {
-		console.log('modal changed');
 		var ModalState = ModalStore.getState();
 		if (ModalState.modalShown) {
 			this.appendModal();
@@ -100,7 +99,6 @@ var ViewManager = React.createClass({
 	},
 
 	_onToastChange: function() {
-		console.log('toast changed');
 		var ToastState = ToastStore.getState();
 		if (this.cachedToastState.toasts.length === 0 && ToastState.toasts.length > 0) {
 			this.showToast();

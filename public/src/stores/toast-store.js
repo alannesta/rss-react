@@ -32,12 +32,18 @@ AppDispatcher.register(function(action) {
 	switch(action.actionType) {
 		case 'SHOW_TOAST':
 			_toastState.toasts.push({
-				toastContent: action.content
+				toastContent: action.content,
+				uid: Math.round(Math.random()*10000)
 			});
 			ToastStore.emitChange();
 			break;
 		case 'HIDE_TOAST':
-			_toastState.toasts = [];
+			var uid = action.uid;
+			//_toastState.toasts = [];
+			_toastState.toasts = _toastState.toasts.filter(function(toast) {
+				return toast.uid !== uid;
+			});
+
 			ToastStore.emitChange();
 			break;
 	}

@@ -22,13 +22,14 @@ var ToastList = React.createClass({
 
 	render: function() {
 		var toasts = [];
+		var self = this;
 		this.state.toasts.forEach(function(item) {
 			console.log(item);
-			toasts.push(<Toast toast = {item}/>);
+			toasts.push(<Toast onAnimationEnd= {self.props.onAnimationEnd} toast = {item}/>);
 		});
 
 		return (
-			<section ref = "toastList" className = "toast-list">
+			<section ref = "toastList"  className = "toast-list">
 				{toasts}
 			</section>
 		)

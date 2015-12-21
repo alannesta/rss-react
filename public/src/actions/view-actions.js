@@ -14,9 +14,10 @@ var ViewActions = {
 		})
 	},
 
-	hideToast: function() {
+	hideToast: function(uid) {
 		AppDispatcher.dispatch({
-			actionType: 'HIDE_TOAST'
+			actionType: 'HIDE_TOAST',
+			uid: uid
 		})
 	}
 };

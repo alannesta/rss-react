@@ -58,9 +58,20 @@ var app = React.createClass({
 	},
 
 	quickDelete: function() {
-		this.state.allFeeds.forEach(function(feed) {
-			FeedAction.deleteFeed(feed);
-		});
+		//this.state.allFeeds.forEach(function(feed) {
+		//	FeedAction.deleteFeed(feed);
+		//});
+		for (var i = 0; i < this.state.allFeeds.length; i++) {
+			doDelete(this.state.allFeeds[i], i)();
+		}
+
+		function doDelete(item, index) {
+			return function() {
+				setTimeout(function() {
+					FeedAction.deleteFeed(item)
+				}, index * 1000);
+			}
+		}
 	},
 
 	_onChange: function () {
