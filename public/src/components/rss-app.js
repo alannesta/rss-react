@@ -7,6 +7,29 @@ var FeedContent = require('./feed-content');
 var FeedSearchInput = require('./feed-search-input');
 var Toast = require('./toasts/toast');
 
+var payload = [
+	{
+		name: '1',
+		feedUrl: 'http://benmccormick.org/rss/'
+	},
+	{
+		name: '2',
+		feedUrl: 'http://www.smashingmagazine.com/feed/'
+	},
+	{
+		name: '3',
+		feedUrl: 'http://feed.cnblogs.com/blog/u/109914/rss'
+	},
+	{
+		name: '4',
+		feedUrl: 'http://coolshell.cn/feed'
+	},
+	{
+		name: '5',
+		feedUrl: 'http://perfectionkills.com/feed.xml'
+	}
+];
+
 var app = React.createClass({
 
 	feedState: function () {
@@ -28,13 +51,16 @@ var app = React.createClass({
 		FeedStore.removeChangeListener(this._onChange);
 	},
 
-	componentWillReceiveProps: function () {
+	quickAdd: function() {
+		payload.forEach(function(feed) {
+			FeedAction.subscribeFeed(feed);
+		});
 	},
 
-	componentWillUpdate: function () {
-	},
-
-	componentDidUpdate: function () {
+	quickDelete: function() {
+		this.state.allFeeds.forEach(function(feed) {
+			FeedAction.deleteFeed(feed);
+		});
 	},
 
 	_onChange: function () {
@@ -45,6 +71,8 @@ var app = React.createClass({
 		return (
 			<section className = "app-container">
 				<FeedSearchInput />
+				<button onClick={this.quickAdd}>Quick Add</button>
+				<button onClick={this.quickDelete}>Quick Delete</button>
 				<section className="feeds">
 					<FeedList selected={this.state.currentFeed} feeds={this.state.allFeeds}></FeedList>
 					<FeedContent content={this.state.feedContent}></FeedContent>

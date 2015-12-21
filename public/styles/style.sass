@@ -27,17 +27,25 @@ section
     display: inline-block
 
 .feed-nav-item
+  display: -webkit-flex
+  flex-direction: row
+  align-items: center
+
   padding: 10px 5px
   font-size: 18px
   cursor: pointer
   &.selected
-    background-color: yellow
+    font-weight: 400
+    color: red
   &:hover
-    background-color: grey
+    background-color: whitesmoke
+  #content
+    width: 75%
   #actions.show-actions
       display: block
   #actions
       display: none
+      width: 25%
 
 .backdrop
   display: none
