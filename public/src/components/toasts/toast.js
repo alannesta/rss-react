@@ -1,4 +1,5 @@
 var React = require('react');
+var ReactDOM = require('react-dom');
 
 var Toast = React.createClass({
 
@@ -9,15 +10,20 @@ var Toast = React.createClass({
 
 	componentDidMount: function() {
 		var self = this;
-		this.refs.toastContent.addEventListener('animationend', function(e) {
-			console.log('animation end, time used: ' + e.elapsedTime);
+		var node = ReactDOM.findDOMNode(this);
+		node.addEventListener('animationend', function() {
+			console.log('animation end: ' + self.props.toast.uid);
 			self.props.onAnimationEnd(self.props.toast.uid);
 		})
 	},
 
+	componentWillUnmount: function() {
+		console.log('toast unmount: ');
+	},
+
 	render: function() {
 		return (
-			<section ref = "toastContent" className = "toast-content">
+			<section className = "toast-content">
 				{this.props.toast.toastContent}
 			</section>
 		)
