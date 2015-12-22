@@ -2,12 +2,7 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 
 var Toast = React.createClass({
-
-	shouldComponentUpdate: function() {
-		//TODO: do not update if in animation
-		return false;
-	},
-
+	
 	componentDidMount: function() {
 		var self = this;
 		var node = ReactDOM.findDOMNode(this);
