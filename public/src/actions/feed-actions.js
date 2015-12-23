@@ -73,7 +73,8 @@ var FeedActions = {
 				return res.json().then(Promise.reject.bind(Promise));
 			}
 		}).then(function(feed) {
-			actions.fetch().then(actions.selectFeed.bind(actions, feed))
+			actions.fetch().then(actions.selectFeed.bind(actions, feed));
+			ViewActions.showToast('Feed subscribed successfully');
 		});
 
 	},
@@ -100,11 +101,19 @@ var FeedActions = {
 		});
 	},
 
-	toggleFeedActions: function(feed) {
+	showFeedActions: function(feed) {
 		AppDispatcher.dispatch({
 			actionType: 'TOGGLE_FEED_ACTIONS',
 			feed: feed,
-			showActions: !feed.showActions
+			showActions: true
+		})
+	},
+
+	hideFeedActions: function(feed) {
+		AppDispatcher.dispatch({
+			actionType: 'TOGGLE_FEED_ACTIONS',
+			feed: feed,
+			showActions: false
 		})
 	}
 };

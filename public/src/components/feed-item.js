@@ -14,11 +14,11 @@ var FeedItem = React.createClass({
 	},
 
 	showActions: function () {
-		FeedActions.toggleFeedActions(this.props.feed);
+		FeedActions.showFeedActions(this.props.feed);
 	},
 
 	hideActions: function () {
-		FeedActions.toggleFeedActions(this.props.feed);
+		FeedActions.hideFeedActions(this.props.feed);
 	},
 
 
