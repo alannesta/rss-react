@@ -82,8 +82,10 @@ var app = React.createClass({
 		return (
 			<section className = "app-container">
 				<FeedSearchInput />
-				<button onClick={this.quickAdd}>Quick Add</button>
-				<button onClick={this.quickDelete}>Quick Delete</button>
+				/*
+					<button onClick={this.quickAdd}>Quick Add</button>
+					<button onClick={this.quickDelete}>Quick Delete</button>
+				*/
 				<section className="feeds">
 					<FeedList selected={this.state.currentFeed} feeds={this.state.allFeeds}></FeedList>
 					<FeedContent content={this.state.feedContent}></FeedContent>

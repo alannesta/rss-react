@@ -7,13 +7,13 @@ var Toast = React.createClass({
 		var self = this;
 		var node = ReactDOM.findDOMNode(this);
 		node.addEventListener('animationend', function() {
-			console.log('animation end: ' + self.props.toast.uid);
+			//console.log('animation end: ' + self.props.toast.uid);
 			self.props.onAnimationEnd(self.props.toast.uid);
 		})
 	},
 
 	componentWillUnmount: function() {
-		console.log('toast unmount: ');
+		//console.log('toast unmount: ');
 	},
 
 	render: function() {
