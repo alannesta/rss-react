@@ -1,17 +1,24 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var FeedUtil = require('../utils/feed-util');
 var ViewActions = require('./view-actions');
+var Feed = require('../models/feed');
 
 var FeedActions = {
 	fetch: function() {
 		return fetch('/api/feeds').then(function(res) {
 			return res.json()
 		}).then(function(data) {
+
+			var feeds = data.map(function(feed) {
+				return new Feed(feed);
+			});
+
 			AppDispatcher.dispatch({
 				actionType: 'FEEDS_INIT',
-				feeds: data
+				feeds: feeds
 			});
-			return data;
+			//console.log(feeds);
+			return feeds;
 		});
 	},
 
@@ -73,7 +80,8 @@ var FeedActions = {
 				return res.json().then(Promise.reject.bind(Promise));
 			}
 		}).then(function(feed) {
-			actions.fetch().then(actions.selectFeed.bind(actions, feed));
+			var subscribedFeed = new Feed(feed);
+			actions.fetch().then(actions.selectFeed.bind(actions, subscribedFeed));
 			ViewActions.showToast('Feed subscribed successfully');
 		});
 
