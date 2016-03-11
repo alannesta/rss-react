@@ -18,6 +18,11 @@ gulp.task('default', function(cb) {
 	runSequence('build-app', 'sass', 'serve', 'watch', cb);
 });
 
+gulp.task('dist', function(cb) {
+	//runSequence('install', 'index', 'watch', 'serve', cb);
+	runSequence('build-app', 'sass', cb);
+});
+
 gulp.task('watch', function() {
 	gulp.watch(['public/src/**/*.js', 'public/index.html'], ['build-app']);
 	gulp.watch(['public/styles/*.sass'], ['sass']);
