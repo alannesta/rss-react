@@ -13,7 +13,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
-app.use(express.static('public/dist'));
+app.use(express.static('public'));
 
 
 //using regex to support backbone pushState:true
