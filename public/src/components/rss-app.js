@@ -42,7 +42,9 @@ var app = React.createClass({
 
 	componentDidMount: function () {
 		FeedAction.fetch().then(function(data) {
-			FeedAction.selectFeed(data[0]);
+			if (data.length>0) {
+				FeedAction.selectFeed(data[0]);
+			}
 		});
 		FeedStore.addChangeListener(this._onChange);
 	},

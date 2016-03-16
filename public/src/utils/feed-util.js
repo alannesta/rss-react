@@ -1,4 +1,4 @@
-var q = require('Q');
+var q = require('q');
 
 var FeedUtil = {
 	loadFeed : function (url, lastDefer) {

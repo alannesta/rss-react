@@ -19,6 +19,8 @@ var FeedActions = {
 			});
 			//console.log(feeds);
 			return feeds;
+		}, function() {
+			return [];
 		});
 	},
 
