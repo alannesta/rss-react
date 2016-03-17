@@ -7,6 +7,8 @@ var browserify = require('browserify');
 var reactify = require('reactify');
 var source = require('vinyl-source-stream');
 var sass = require('gulp-sass');
+var postcss = require('gulp-postcss');
+var autoprefixer = require('autoprefixer');
 var path = require('path');
 
 //var KarmaServer = require('karma').Server;
@@ -45,10 +47,10 @@ gulp.task('build-app', function() {
 		.pipe(gulp.dest(dest));
 });
 
-
-gulp.task('sass', function() {
+gulp.task('sass', function () {
 	gulp.src(path.join(__dirname, 'public/styles/style.sass'))
 		.pipe(sass().on('error', sass.logError))
+		.pipe(postcss([autoprefixer({browsers: ['last 2 versions']})]))
 		.pipe(gulp.dest(dest));
 });
 
