@@ -7,7 +7,24 @@ section
   height: 100%
 
 .toolbar
-  height: 100px
+  display: flex
+  flex: 1
+  align-items: center
+  justify-content: center
+  input
+    height: 30px
+    width: 180px
+    border-radius: 5px
+    border: 2px solid grey
+    font-size: 18px
+  .search-button
+    margin-left: 5px
+    height: 32px
+    width: 32px
+    background: url("../assets/ico-search.svg")
+    &:hover
+      background: url("../assets/ico-search-hover.svg")
+
 
 .feeds
   display: flex

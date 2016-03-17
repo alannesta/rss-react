@@ -11,7 +11,7 @@ var FeedContent = React.createClass({
 		return (
 			<section className = "toolbar">
 				<input ref = "inputField" type = "text" />
-				<button onClick = {this.searchFeed}>Submit</button>
+				<div className="search-button" onClick = {this.searchFeed}></div>
 			</section>
 		)
 	}
