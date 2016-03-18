@@ -46,18 +46,44 @@ AppDispatcher.register(function(action) {
 			break;
 
 		case 'TOGGLE_FEED_ACTIONS':
-			var idx = -1;
+			var idx = getFeedId();
+			//_feedsState.allFeeds.forEach(function(item, index) {
+			//	if (item._id === action.feed._id) {
+			//		idx = index;
+			//	}
+			//});
+			_feedsState.allFeeds[idx].showActions = action.showActions;
+			FeedStore.emitChange();
+			break;
+		case 'CONTENT_LOADING':
+			console.log('content loading dispatched');
 			_feedsState.allFeeds.forEach(function(item, index) {
 				if (item._id === action.feed._id) {
-					idx = index;
+					_feedsState.allFeeds[index].isLoading = true;
+				} else {
+					_feedsState.allFeeds[index].isLoading = false;
 				}
 			});
-			_feedsState.allFeeds[idx].showActions = action.showActions;
+			FeedStore.emitChange();
+			break;
+		case 'CONTENT_LOADED':
+			console.log('content loaded dispatched');
+			var idx = getFeedId();
+			_feedsState.allFeeds[idx].isLoading = false;
 			FeedStore.emitChange();
 			break;
 
 		default:
 		// no op
+	}
+
+	function getFeedId() {
+		_feedsState.allFeeds.forEach(function(item, index) {
+			if (item._id === action.feed._id) {
+				idx = index;
+			}
+		});
+		return idx;
 	}
 });
 

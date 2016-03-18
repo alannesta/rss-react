@@ -22,6 +22,7 @@ function Feed(options) {
 	}
 
 	this.feedUrl = options.feedUrl;
+	this.isLoading = options.isLoading;
 }
 
 module.exports = Feed;

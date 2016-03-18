@@ -33,12 +33,18 @@ var FeedItem = React.createClass({
 			'show-actions': this.props.feed.showActions
 		});
 
+		var isLoading = classNames({
+			'isLoading': this.props.feed.isLoading
+		});
+
 		return (
 			<li className={selectedClass} onMouseEnter={this.showActions}
 				onMouseLeave={this.hideActions}>
+				<section className={isLoading} id="status"></section>
 				<section id="content"  onClick={this.selectFeed}>{this.props.feed.name}</section>
 				<section id="actions" className={feedAction}>
-					<button onClick={this.deleteFeed}>Delete</button>
+					{ /*<button onClick={this.deleteFeed}>Delete</button> */}
+					<span onClick={this.deleteFeed}>x</span>
 				</section>
 			</li>
 			//<li onClick={FeedActions.selectFeed.bind(this, this.props.feed)}>{this.props.feed.name}</li>	// more straight forward
