@@ -31,6 +31,18 @@ var FeedActions = {
 			feed: feed
 		});
 		FeedUtil.loadFeed(feed.feedUrl).then(function(content) {
+			console.log(content);
+
+			// persist feed content
+			fetch('/api/feed/' + feed.id, {
+				method: 'post',
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				body: content
+			});
+
 			AppDispatcher.dispatch({
 				actionType: 'SELECT_FEED',
 				feed: feed,
