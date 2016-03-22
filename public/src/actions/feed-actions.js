@@ -34,7 +34,7 @@ var FeedActions = {
 			console.log(content);
 
 			// persist feed content
-			fetch('/api/feed/' + feed.id, {
+			fetch('/api/feed/' + feed.id + '/blogs', {
 				method: 'post',
 				headers: {
 					'Accept': 'application/json',

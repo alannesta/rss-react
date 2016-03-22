@@ -26,7 +26,7 @@ app.use(function(req, res, next) {
 	var api_regx = /\/api/;
 	if (api_regx.test(req.url)) {
 		var old = req.url;
-		return res.redirect('http://localhost:8080'+ old.replace('/api', ''));
+		return res.redirect(307, 'http://localhost:8080'+ old.replace('/api', ''));
 		//console.log('original: ' + req.url);
 		//req.url = old.replace('/api', '');
 		//console.log('current: ' + req.url);
