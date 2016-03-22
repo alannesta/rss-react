@@ -40,9 +40,18 @@ router.post('/feed', function (req, res) {
 router.delete('/feed/:id', function (req, res) {
 	//Feeds.remove({_id: req.params.id}, function (err) {
 	//	if (!err) {
-	//		res.status(200).send('removed successfully');
+	//
 	//	}
 	//});
+	FeedService.deleteFeedByID(req.params.id, function(err, results) {
+		if (err) {
+			console.log(err);
+		}
+		if (!err) {
+			res.status(200).send('removed successfully');
+		}
+	})
+
 });
 
 

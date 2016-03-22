@@ -13,6 +13,12 @@ var feedService = {
 			feed_url: feed.feedUrl,
 			last_update: new Date()
 		}, callback);
+	},
+
+	deleteFeedByID: function(feedId, callback) {
+		console.log(feedId);
+		var deleteQuery = "DELETE from feed WHERE id =" + feedId;
+		connection.query(deleteQuery, callback);
 	}
 };
 
