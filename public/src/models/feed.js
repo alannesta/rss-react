@@ -25,6 +25,8 @@ function Feed(options) {
 	}
 
 	this.feedUrl = options.feedUrl || options.feed_url;
+	this.lastUpdate = options.last_update;
+
 	this.isLoading = options.isLoading;
 }
 

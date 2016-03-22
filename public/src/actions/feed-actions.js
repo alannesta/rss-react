@@ -29,34 +29,65 @@ var FeedActions = {
 	 * @param feed
 	 */
 	selectFeed: function(feed) {
+
+		var actions = this;
+
 		AppDispatcher.dispatch({
 			actionType: 'CONTENT_LOADING',
 			spinnerType: 'FEED_ITEM',
 			feed: feed
 		});
-		FeedUtil.loadFeed(feed.feedUrl).then(function(content) {
-			console.log(content);
 
-			// persist feed content
-			//fetch('/api/feed/' + feed.id + '/blogs', {
-			//	method: 'post',
-			//	headers: {
-			//		'Accept': 'application/json',
-			//		'Content-Type': 'application/json'
-			//	},
-			//	body: content
-			//});
+		actions.checkFeedUpdateStatus(feed).then(function(load) {
+			if (load) {
+				FeedUtil.loadFeed(feed.feedUrl).then(actions._feedLoaded);
+			}else {
+				actions.loadBlogContent(feed).then(actions._feedLoaded)
+			}
+		});
+	},
 
-			AppDispatcher.dispatch({
-				actionType: 'SELECT_FEED',
-				feed: feed,
-				content: content
-			});
-			AppDispatcher.dispatch({
-				actionType: 'CONTENT_LOADED',
-				spinnerType: 'FEED_ITEM',
-				feed: feed
-			});
+	/**
+	 * Check last_update time stamp of feed
+	 * @param feed
+	 */
+	checkFeedUpdateStatus: function(feed) {
+		fetch('/api/feed/'+ feed.id).then(function(res) {
+			if (res.status == 200) {
+				return res.json();
+			}
+		}).then(function(feed) {
+			if (feed.lastUpdate) {
+				// unix timestamp compare
+				var now = Date.now();
+				var lastUpdate = Date.parse(feed.lastUpdate)/1000;
+				if ((now - lastUpdate) > 4320000) {
+					return true;
+				}
+				return false;
+			}
+			return true;
+		})
+	},
+
+	/**
+	 * Load feed content from "blog" table
+	 * @param feed
+	 */
+	loadBlogContent: function(feed) {
+
+	},
+
+	_feedLoaded: function(content) {
+		AppDispatcher.dispatch({
+			actionType: 'SELECT_FEED',
+			feed: feed,
+			content: content
+		});
+		AppDispatcher.dispatch({
+			actionType: 'CONTENT_LOADED',
+			spinnerType: 'FEED_ITEM',
+			feed: feed
 		});
 	},
 
