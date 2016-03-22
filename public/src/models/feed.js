@@ -19,9 +19,12 @@ function Feed(options) {
 	} else if (typeof options.feedName !== 'undefined') {
 		this.feedName = options.feedName;
 		this.name = this.feedName;
+	} else if (typeof options.feed_name !== 'undefined') {
+		this.feedName = options.feed_name;
+		this.name = this.feedName;
 	}
 
-	this.feedUrl = options.feedUrl;
+	this.feedUrl = options.feedUrl || options.feed_url;
 	this.isLoading = options.isLoading;
 }
 

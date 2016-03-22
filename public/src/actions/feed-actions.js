@@ -24,6 +24,10 @@ var FeedActions = {
 		});
 	},
 
+	/**
+	 * the feed here is a {Feed} Object with "id" attribute
+	 * @param feed
+	 */
 	selectFeed: function(feed) {
 		AppDispatcher.dispatch({
 			actionType: 'CONTENT_LOADING',
@@ -34,14 +38,14 @@ var FeedActions = {
 			console.log(content);
 
 			// persist feed content
-			fetch('/api/feed/' + feed.id + '/blogs', {
-				method: 'post',
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json'
-				},
-				body: content
-			});
+			//fetch('/api/feed/' + feed.id + '/blogs', {
+			//	method: 'post',
+			//	headers: {
+			//		'Accept': 'application/json',
+			//		'Content-Type': 'application/json'
+			//	},
+			//	body: content
+			//});
 
 			AppDispatcher.dispatch({
 				actionType: 'SELECT_FEED',
@@ -76,6 +80,11 @@ var FeedActions = {
 		})
 	},
 
+	/**
+	 * Here the feed passed in is without "id" (parsed by google feed api, not persisted yet)
+	 * @param feed
+	 * @returns {*|Promise.<T>}
+	 */
 	subscribeFeed: function(feed) {
 		var actions = this;
 		return fetch('/api/feed', {
@@ -85,7 +94,7 @@ var FeedActions = {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-				name: feed.name,
+				feedName: feed.name,	// name is used in the results from google api
 				feedUrl: feed.feedUrl
 			})
 		}).then(function (res) {

@@ -5,7 +5,6 @@ var ViewActions = require('../../actions/view-actions');
 var FeedModal = React.createClass({
 
 	confirm: function() {
-		console.log(this.props);
 		this.props.onConfirm(this.props.content);
 		ViewActions.closeModal();
 	},
