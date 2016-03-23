@@ -19,6 +19,29 @@ router.get('/feeds', function (req, res) {
 
 });
 
+router.get('/feed/:id', function (req, res) {
+	FeedService.getFeedByID(req.params.id, function(error, results, fields) {
+		if (error) {
+			throw error;
+		}
+		//console.log(results);
+		res.json(results[0]);	// only one feed should be get
+	})
+
+});
+
+router.post('/feed/:id', function (req, res) {
+	console.log(req.body);
+
+	FeedService.updateFeed(req.body, function(err, result) {
+		if (err) {
+			console.log(err)
+		} else {
+			res.status(200).send('update success');
+		}
+	})
+});
+
 router.post('/feed', function (req, res) {
 	console.log(req.body);
 
@@ -26,7 +49,6 @@ router.post('/feed', function (req, res) {
 		if (err) {
 			console.log(err)
 		} else {
-			console.log('test', result);
 			// has to return the feed to trigger auto select
 			res.status(200).send({
 				id: result.insertId,
@@ -38,11 +60,6 @@ router.post('/feed', function (req, res) {
 });
 
 router.delete('/feed/:id', function (req, res) {
-	//Feeds.remove({_id: req.params.id}, function (err) {
-	//	if (!err) {
-	//
-	//	}
-	//});
 	FeedService.deleteFeedByID(req.params.id, function(err, results) {
 		if (err) {
 			console.log(err);
@@ -53,6 +70,5 @@ router.delete('/feed/:id', function (req, res) {
 	})
 
 });
-
 
 module.exports = router;

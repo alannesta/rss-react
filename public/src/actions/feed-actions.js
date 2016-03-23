@@ -38,12 +38,32 @@ var FeedActions = {
 			feed: feed
 		});
 
-		actions.checkFeedUpdateStatus(feed).then(function(load) {
-			if (load) {
-				FeedUtil.loadFeed(feed.feedUrl).then(actions._feedLoaded);
-			}else {
-				actions.loadBlogContent(feed).then(actions._feedLoaded)
-			}
+		if (actions.checkFeedUpdateStatus(feed)) {
+			FeedUtil.loadFeed(feed.feedUrl).then(function(content) {
+				actions._feedLoaded(feed, content);
+				feed.lastUpdate = new Date();
+				actions.updateFeed(feed);
+			});
+		}else {
+			actions.loadBlogContent(feed).then(function(content) {
+				actions._feedLoaded(feed, content);
+			})
+		}
+	},
+
+	/**
+	 * Update feed content
+	 */
+	updateFeed: function(feed) {
+		return fetch('/api/feed/' + feed.id, {
+			method: 'post',
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(feed)
+		}, function(res) {
+			console.log(res.status);
 		});
 	},
 
@@ -52,22 +72,15 @@ var FeedActions = {
 	 * @param feed
 	 */
 	checkFeedUpdateStatus: function(feed) {
-		fetch('/api/feed/'+ feed.id).then(function(res) {
-			if (res.status == 200) {
-				return res.json();
-			}
-		}).then(function(feed) {
-			if (feed.lastUpdate) {
-				// unix timestamp compare
-				var now = Date.now();
-				var lastUpdate = Date.parse(feed.lastUpdate)/1000;
-				if ((now - lastUpdate) > 4320000) {
-					return true;
-				}
+		if (feed.lastUpdate) {
+			// unix timestamp compare, refresh if time span is greater than 12 hours
+			var now = Date.now();
+			var lastUpdate = Date.parse(feed.lastUpdate);
+			if ((now - lastUpdate) < 43200000) {
 				return false;
 			}
-			return true;
-		})
+		}
+		return true;
 	},
 
 	/**
@@ -78,7 +91,7 @@ var FeedActions = {
 
 	},
 
-	_feedLoaded: function(content) {
+	_feedLoaded: function(feed, content) {
 		AppDispatcher.dispatch({
 			actionType: 'SELECT_FEED',
 			feed: feed,
