@@ -13,7 +13,6 @@ router.get('/feeds', function (req, res) {
 		if (error) {
 			throw error;
 		}
-		console.log(results);
 		res.json(results);
 	})
 
@@ -31,8 +30,6 @@ router.get('/feed/:id', function (req, res) {
 });
 
 router.post('/feed/:id', function (req, res) {
-	console.log(req.body);
-
 	FeedService.updateFeed(req.body, function(err, result) {
 		if (err) {
 			console.log(err)
@@ -42,9 +39,19 @@ router.post('/feed/:id', function (req, res) {
 	})
 });
 
-router.post('/feed', function (req, res) {
-	console.log(req.body);
+// save blog content
+router.post('/feed/:id/blogs', function (req, res) {
+	BlogService.saveBlogs(req.body, function(err, result) {
+		if (err) {
+			console.log(err)
+		} else {
+			console.log('save blog content success', result);
+			res.status(200).send('blogs save success');
+		}
+	})
+});
 
+router.post('/feed', function (req, res) {
 	FeedService.saveFeed(req.body, function(err, result) {
 		if (err) {
 			console.log(err)

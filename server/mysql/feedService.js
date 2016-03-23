@@ -1,4 +1,5 @@
 var connection = require('./mysql-connector');
+var mysql = require('mysql');
 
 var feedService = {
 	getAllFeeds: function(callback) {
@@ -12,12 +13,22 @@ var feedService = {
 
 	saveFeed: function(feed, callback) {
 		var insertQuery = "INSERT IGNORE INTO feed SET ?";
-		console.log(feed);
+		console.log('save feed: --->', feed);
 		connection.query(insertQuery, {
 			feed_name: feed.feedName,
 			feed_url: feed.feedUrl,
 			last_update: new Date()
 		}, callback);
+
+		//inspection
+		//var statement = "INSERT IGNORE INTO feed VALUES ?";
+		//var insert = {
+		//	feed_name: feed.feedName,
+		//	feed_url: feed.feedUrl,
+		//	last_update: new Date()
+		//};
+		//console.log(mysql.format(statement,insert));
+
 	},
 
 	updateFeed: function(feed, callback) {

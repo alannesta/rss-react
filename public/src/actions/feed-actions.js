@@ -41,8 +41,9 @@ var FeedActions = {
 		if (actions.checkFeedUpdateStatus(feed)) {
 			FeedUtil.loadFeed(feed.feedUrl).then(function(content) {
 				actions._feedLoaded(feed, content);
-				feed.lastUpdate = new Date();
-				actions.updateFeed(feed);
+				//feed.lastUpdate = new Date();
+				//actions.updateFeed(feed);
+				actions.saveBlogContent(feed.id, content);
 			});
 		}else {
 			actions.loadBlogContent(feed).then(function(content) {
@@ -72,23 +73,50 @@ var FeedActions = {
 	 * @param feed
 	 */
 	checkFeedUpdateStatus: function(feed) {
-		if (feed.lastUpdate) {
-			// unix timestamp compare, refresh if time span is greater than 12 hours
-			var now = Date.now();
-			var lastUpdate = Date.parse(feed.lastUpdate);
-			if ((now - lastUpdate) < 43200000) {
-				return false;
-			}
-		}
+		//if (feed.lastUpdate) {
+		//	// unix timestamp compare, refresh if time span is greater than 12 hours
+		//	var now = Date.now();
+		//	var lastUpdate = Date.parse(feed.lastUpdate);
+		//	if ((now - lastUpdate) < 43200000) {
+		//		return false;
+		//	}
+		//}
 		return true;
 	},
 
 	/**
-	 * Load feed content from "blog" table
+	 * Load blog content from "blog" table for a specific feed
 	 * @param feed
 	 */
 	loadBlogContent: function(feed) {
 
+	},
+
+	/**
+	 * Persist blogs for a specific feed to the database
+	 * @param blogs
+	 */
+	saveBlogContent: function(feedId, blogs) {
+		console.log(blogs);
+		var strippedBlogs = blogs.map(function(blog) {
+			return blog = {
+				feed_id: feedId,
+				blog_url: blog.link,
+				blog_title: blog.title,
+				blog_digest: blog.contentSnippet,
+				post_date: new Date(Date.parse(blog.publishedDate))
+			};
+		});
+		return fetch('/api/feed/' + feedId + '/blogs', {
+			method: 'post',
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(strippedBlogs)
+		}, function(res) {
+			console.log(res.status);
+		});
 	},
 
 	_feedLoaded: function(feed, content) {
