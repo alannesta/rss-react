@@ -97,7 +97,6 @@ var FeedActions = {
 	 * @param blogs
 	 */
 	saveBlogContent: function(feedId, blogs) {
-		console.log(blogs);
 		var strippedBlogs = blogs.map(function(blog) {
 			return blog = {
 				feed_id: feedId,

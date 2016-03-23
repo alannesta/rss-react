@@ -6,11 +6,44 @@ var feedService = {
 		connection.query('SELECT * from blogs', callback)
 	},
 
-	saveBlogs: function(blogs, callback) {
+	saveBlogs: function(blogs, feedId, callback) {
 
 		var values = generateInsertValues(blogs, ['feed_id', 'blog_url', 'blog_title', 'post_date', 'blog_digest']);
 
-		connection.query("INSERT IGNORE INTO blogs (feed_id, blog_url, blog_title, post_date, blog_digest) VALUES ?", [values], callback);
+
+		connection.beginTransaction(function(err) {
+			if (err) { throw err; }
+			connection.query("INSERT IGNORE INTO blogs (feed_id, blog_url, blog_title, post_date, blog_digest) VALUES ?", [values], function(err, result) {
+				if (err) {
+					return connection.rollback(function() {
+						callback(err);
+						throw err;
+					});
+				}
+
+				// update feed table (last_update)
+				connection.query('UPDATE feed SET last_update=? WHERE id = ?', [new Date(), feedId], function(err) {
+					if (err) {
+						return connection.rollback(function() {
+							callback(err);
+							throw err;
+						});
+					}
+					connection.commit(function(err) {
+						if (err) {
+							return connection.rollback(function() {
+								callback(err);
+								throw err;
+							});
+						}
+						callback();
+						console.log('transaction success!');
+					});
+				});
+			});
+		});
+
+		//connection.query("INSERT IGNORE INTO blogs (feed_id, blog_url, blog_title, post_date, blog_digest) VALUES ?", [values], callback);
 
 		//connection.beginTransaction(function(err) {
 		//	if (err) {

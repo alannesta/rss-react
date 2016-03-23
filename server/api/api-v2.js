@@ -41,7 +41,7 @@ router.post('/feed/:id', function (req, res) {
 
 // save blog content
 router.post('/feed/:id/blogs', function (req, res) {
-	BlogService.saveBlogs(req.body, function(err, result) {
+	BlogService.saveBlogs(req.body, req.params.id, function(err, result) {
 		if (err) {
 			console.log(err)
 		} else {
