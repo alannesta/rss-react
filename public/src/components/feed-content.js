@@ -5,8 +5,15 @@ var FeedContent = React.createClass({
 
 		var content = [];
 
-		this.props.content.forEach(function(item) {
-			content.push(<section key={item.title}><h2><a href={item.link} target="_blank">{item.title}</a></h2><div>{item.contentSnippet}</div></section>);
+		this.props.blogs.forEach(function(item, index) {
+			content.push(
+				<section key={index}>
+					<h2>
+						<a href={item.blog_url} target="_blank">{item.blog_title}</a>
+					</h2>
+					<div>{item.blog_digest}</div>
+				</section>
+			);
 		});
 
 		return (

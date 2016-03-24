@@ -8,7 +8,8 @@ var CHANGE_EVENT = 'change';
 var _feedsState = {
 	currentFeed: {},
 	allFeeds: [],
-	feedContent: []
+	//feedContent: []
+	blogs: []
 };
 
 var feed_mixin = _.extend({}, EventEmitter.prototype);
@@ -36,7 +37,7 @@ AppDispatcher.register(function(action) {
 	switch(action.actionType) {
 		case 'SELECT_FEED':
 			_feedsState.currentFeed = action.feed;
-			_feedsState.feedContent = action.content;
+			_feedsState.blogs = action.blogs;
 			FeedStore.emitChange();
 			break;
 
@@ -56,7 +57,6 @@ AppDispatcher.register(function(action) {
 			FeedStore.emitChange();
 			break;
 		case 'CONTENT_LOADING':
-			console.log('content loading dispatched');
 			_feedsState.allFeeds.forEach(function(item, index) {
 				if (item._id === action.feed._id) {
 					_feedsState.allFeeds[index].isLoading = true;
@@ -67,7 +67,6 @@ AppDispatcher.register(function(action) {
 			FeedStore.emitChange();
 			break;
 		case 'CONTENT_LOADED':
-			console.log('content loaded dispatched');
 			var idx = getFeedId();
 			_feedsState.allFeeds[idx].isLoading = false;
 			FeedStore.emitChange();

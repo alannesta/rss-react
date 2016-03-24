@@ -2,6 +2,7 @@ var AppDispatcher = require('../dispatcher/AppDispatcher');
 var FeedUtil = require('../utils/feed-util');
 var ViewActions = require('./view-actions');
 var Feed = require('../models/feed');
+var Blog = require('../models/blog');
 
 var FeedActions = {
 	fetch: function() {
@@ -38,16 +39,20 @@ var FeedActions = {
 			feed: feed
 		});
 
-		if (actions.checkFeedUpdateStatus(feed)) {
+		if (actions._needReloadFeed(feed)) {
 			FeedUtil.loadFeed(feed.feedUrl).then(function(content) {
-				actions._feedLoaded(feed, content);
-				//feed.lastUpdate = new Date();
-				//actions.updateFeed(feed);
-				actions.saveBlogContent(feed.id, content);
+				var blogs = content.map(function(blog) {
+					return new Blog(blog);
+				});
+				actions._feedLoaded(feed, blogs);
+				actions.saveBlogContent(feed.id, blogs);
 			});
 		}else {
 			actions.loadBlogContent(feed.id).then(function(content) {
-				actions._feedLoaded(feed, content);
+				var blogs = content.map(function(blog) {
+					return new Blog(blog);
+				});
+				actions._feedLoaded(feed, blogs);
 			})
 		}
 	},
@@ -72,18 +77,18 @@ var FeedActions = {
 	 * Check last_update time stamp of feed
 	 * @param feed
 	 */
-	checkFeedUpdateStatus: function(feed) {
-		//if (feed.lastUpdate) {
-		//	// unix timestamp compare, refresh if time span is greater than 12 hours
-		//	var now = Date.now();
-		//	var lastUpdate = Date.parse(feed.lastUpdate);
-		//	if ((now - lastUpdate) < 43200000) {
-		//		return false;
-		//	}
-		//}
-		//return true;
-
-		return false;
+	_needReloadFeed: function(feed) {
+		if (feed.lastUpdate) {
+			// unix timestamp compare, refresh if time span is greater than 12 hours
+			var now = Date.now();
+			var lastUpdate = Date.parse(feed.lastUpdate);
+			if ((now - lastUpdate) < 43200000) {
+				console.log('no need to reload feed');
+				return false;
+			}
+		}
+		console.log('reload feed from google api');
+		return true;
 	},
 
 	/**
@@ -108,10 +113,10 @@ var FeedActions = {
 		var strippedBlogs = blogs.map(function(blog) {
 			return blog = {
 				feed_id: feedId,
-				blog_url: blog.link,
-				blog_title: blog.title,
-				blog_digest: blog.contentSnippet,
-				post_date: new Date(Date.parse(blog.publishedDate))
+				blog_url: blog.blog_url,
+				blog_title: blog.blog_title,
+				blog_digest: blog.blog_digest,
+				post_date: new Date(Date.parse(blog.post_date))
 			};
 		});
 		return fetch('/api/feed/' + feedId + '/blogs', {
@@ -126,11 +131,11 @@ var FeedActions = {
 		});
 	},
 
-	_feedLoaded: function(feed, content) {
+	_feedLoaded: function(feed, blogs) {
 		AppDispatcher.dispatch({
 			actionType: 'SELECT_FEED',
 			feed: feed,
-			content: content
+			blogs: blogs
 		});
 		AppDispatcher.dispatch({
 			actionType: 'CONTENT_LOADED',

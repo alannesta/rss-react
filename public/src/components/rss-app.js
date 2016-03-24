@@ -90,7 +90,7 @@ var app = React.createClass({
 				*/}
 				<section className="feeds">
 					<FeedList selected={this.state.currentFeed} feeds={this.state.allFeeds}></FeedList>
-					<FeedContent content={this.state.feedContent}></FeedContent>
+					<FeedContent blogs={this.state.blogs}></FeedContent>
 				</section>
 			</section>
 		)

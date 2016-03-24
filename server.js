@@ -24,21 +24,6 @@ app.get(/^\/app(\/\w*)*$/, function (req, res) {
 	res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
-
-// rewrite to spring boot url
-//app.use(function(req, res, next) {
-//	var api_regx = /\/api/;
-//	if (api_regx.test(req.url)) {
-//		var old = req.url;
-//		return res.redirect(307, 'http://localhost:8080'+ old.replace('/api', ''));
-//		//console.log('original: ' + req.url);
-//		//req.url = old.replace('/api', '');
-//		//console.log('current: ' + req.url);
-//	}
-//	next();
-//
-//});
-
 app.use('/api', apiv2);
 
 // catch 404 and forward to error handler
@@ -76,15 +61,5 @@ if (app.get('env') === 'development') {
 app.set('port', process.env.PORT || 3000);
 
 var server = app.listen(app.get('port'), function () {
-
 	console.log('Express server listening on port ' + server.address().port);
-	//mysql.connect();
-	//
-	//mysql.query('SELECT * FROM blogs', function(err, rows, fields) {
-	//	if (err) throw err;
-	//
-	//	console.log('The solution is: ', rows);
-	//});
-	//
-	//mysql.end();
 });
