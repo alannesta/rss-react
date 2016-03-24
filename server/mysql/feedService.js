@@ -1,6 +1,8 @@
 var connection = require('./mysql-connector');
 var mysql = require('mysql');
 
+var logger = require('../logger');
+
 var feedService = {
 	getAllFeeds: function(callback) {
 		connection.query('SELECT * from feed', callback);
@@ -13,7 +15,8 @@ var feedService = {
 
 	saveFeed: function(feed, callback) {
 		var insertQuery = "INSERT IGNORE INTO feed SET ?";
-		console.log('save feed: --->', feed);
+		//console.log('save feed: --->', feed);
+		logger.info('FeedService.saveFeed: ', feed);
 		connection.query(insertQuery, {
 			feed_name: feed.feedName,
 			feed_url: feed.feedUrl,
@@ -41,7 +44,6 @@ var feedService = {
 	},
 
 	deleteFeedByID: function(feedId, callback) {
-		console.log(feedId);
 		var deleteQuery = "DELETE from feed WHERE id =" + feedId;
 		connection.query(deleteQuery, callback);
 	}

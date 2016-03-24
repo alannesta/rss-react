@@ -83,11 +83,11 @@ var FeedActions = {
 			var now = Date.now();
 			var lastUpdate = Date.parse(feed.lastUpdate);
 			if ((now - lastUpdate) < 43200000) {
-				console.log('no need to reload feed');
+				console.log('last updated ' + (now - lastUpdate)/3600000 + 'hours ago, load blogs from database');
 				return false;
 			}
 		}
-		console.log('reload feed from google api');
+		console.log('reload blogs using google api');
 		return true;
 	},
 

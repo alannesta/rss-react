@@ -7,9 +7,11 @@ var router = express.Router();
 var FeedService = require('../mysql/feedService');
 var BlogService = require('../mysql/blogService');
 
+var logger = require('../logger');
+
 
 router.get('/feeds', function (req, res) {
-	FeedService.getAllFeeds(function(error, results, fields) {
+	FeedService.getAllFeeds(function(error, results) {
 		if (error) {
 			throw error;
 		}
@@ -19,11 +21,10 @@ router.get('/feeds', function (req, res) {
 });
 
 router.get('/feed/:id', function (req, res) {
-	FeedService.getFeedByID(req.params.id, function(error, results, fields) {
+	FeedService.getFeedByID(req.params.id, function(error, results) {
 		if (error) {
 			throw error;
 		}
-		//console.log(results);
 		res.json(results[0]);	// only one feed should be get
 	})
 
@@ -43,9 +44,8 @@ router.post('/feed/:id', function (req, res) {
 router.post('/feed/:id/blogs', function (req, res) {
 	BlogService.saveBlogs(req.body, req.params.id, function(err, result) {
 		if (err) {
-			console.log(err)
+			logger.error(err);
 		} else {
-			console.log('save blog content success', result);
 			res.status(200).send('blogs save success');
 		}
 	})
@@ -56,7 +56,6 @@ router.get('/feed/:id/blogs', function (req, res) {
 		if (err) {
 			console.log(err)
 		} else {
-			console.log('load blog content success', result);
 			res.status(200).json(result);
 		}
 	})

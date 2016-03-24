@@ -1,13 +1,14 @@
 var connection = require('./mysql-connector');
 var mysql = require('mysql');
+var logger = require('../logger');
 
-var feedService = {
+var blogService = {
 	getAllBlogs: function(feedId, callback) {
 		connection.query('SELECT blog_url, blog_title, post_date, blog_digest from blogs WHERE feed_id=' + feedId, callback)
 	},
 
 	saveBlogs: function(blogs, feedId, callback) {
-
+		logger.debug('BlogService.saveBlogs: ', blogs, feedId);
 		var values = generateInsertValues(blogs, ['feed_id', 'blog_url', 'blog_title', 'post_date', 'blog_digest']);
 
 		connection.beginTransaction(function(err) {
@@ -56,4 +57,4 @@ function generateInsertValues(objects, keys) {
 	return items;
 }
 
-module.exports = feedService;
+module.exports = blogService;
