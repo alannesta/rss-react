@@ -51,6 +51,17 @@ router.post('/feed/:id/blogs', function (req, res) {
 	})
 });
 
+router.get('/feed/:id/blogs', function (req, res) {
+	BlogService.getAllBlogs(req.params.id, function(err, result) {
+		if (err) {
+			console.log(err)
+		} else {
+			console.log('load blog content success', result);
+			res.status(200).json(result);
+		}
+	})
+});
+
 router.post('/feed', function (req, res) {
 	FeedService.saveFeed(req.body, function(err, result) {
 		if (err) {

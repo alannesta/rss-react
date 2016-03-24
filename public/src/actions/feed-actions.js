@@ -46,7 +46,7 @@ var FeedActions = {
 				actions.saveBlogContent(feed.id, content);
 			});
 		}else {
-			actions.loadBlogContent(feed).then(function(content) {
+			actions.loadBlogContent(feed.id).then(function(content) {
 				actions._feedLoaded(feed, content);
 			})
 		}
@@ -81,15 +81,23 @@ var FeedActions = {
 		//		return false;
 		//	}
 		//}
-		return true;
+		//return true;
+
+		return false;
 	},
 
 	/**
 	 * Load blog content from "blog" table for a specific feed
 	 * @param feed
 	 */
-	loadBlogContent: function(feed) {
-
+	loadBlogContent: function(feedId) {
+		return fetch('/api/feed/'+feedId+'/blogs').then(function(res) {
+			if (res.status == 200) {
+				return res.json();
+			}else {
+				return res.json().then(Promise.reject.bind(Promise));
+			}
+		});
 	},
 
 	/**
