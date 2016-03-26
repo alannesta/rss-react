@@ -46,16 +46,18 @@ AppDispatcher.register(function(action) {
 			FeedStore.emitChange();
 			break;
 
+		case 'UPDATE_FEED':
+			var idx = getFeedId();
+			_feedsState.allFeeds[idx] = action.feed;
+			FeedStore.emitChange();
+			break;
+
 		case 'TOGGLE_FEED_ACTIONS':
 			var idx = getFeedId();
-			//_feedsState.allFeeds.forEach(function(item, index) {
-			//	if (item._id === action.feed._id) {
-			//		idx = index;
-			//	}
-			//});
 			_feedsState.allFeeds[idx].showActions = action.showActions;
 			FeedStore.emitChange();
 			break;
+
 		case 'CONTENT_LOADING':
 			_feedsState.allFeeds.forEach(function(item, index) {
 				if (item._id === action.feed._id) {
@@ -66,6 +68,7 @@ AppDispatcher.register(function(action) {
 			});
 			FeedStore.emitChange();
 			break;
+
 		case 'CONTENT_LOADED':
 			var idx = getFeedId();
 			_feedsState.allFeeds[idx].isLoading = false;
