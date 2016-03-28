@@ -18,7 +18,6 @@ var FeedActions = {
 				actionType: 'FEEDS_INIT',
 				feeds: feeds
 			});
-			//console.log(feeds);
 			return feeds;
 		}, function() {
 			return [];
@@ -54,7 +53,8 @@ var FeedActions = {
 				});
 			});
 		}else {
-			actions.loadBlogContent(feed.id).then(function(content) {
+			// load the last 10 blogs from database
+			actions.loadBlogContent(feed.id, 10).then(function(content) {
 				var blogs = content.map(function(blog) {
 					return new Blog(blog);
 				});
@@ -101,8 +101,8 @@ var FeedActions = {
 	 * Load blog content from "blog" table for a specific feed
 	 * @param feed
 	 */
-	loadBlogContent: function(feedId) {
-		return fetch('/api/feed/'+feedId+'/blogs').then(function(res) {
+	loadBlogContent: function(feedId, count) {
+		return fetch('/api/feed/'+feedId+'/blogs?count=' + count).then(function(res) {
 			if (res.status == 200) {
 				return res.json();
 			}else {
