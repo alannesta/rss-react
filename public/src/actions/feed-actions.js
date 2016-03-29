@@ -51,7 +51,7 @@ var FeedActions = {
 					blogCount: 20		// hacky, return a fake total amount without reading from the database
 				};
 
-				actions._feedLoaded(feed, fetchResult);
+				actions._feedSelected(feed, fetchResult);
 				actions.saveBlogContent(feed.id, blogs).then(function(updatedFeed) {
 					AppDispatcher.dispatch({
 						actionType: "UPDATE_FEED",
@@ -61,14 +61,25 @@ var FeedActions = {
 			});
 		}else {
 			// load the last 10 blogs from database
-			actions.loadBlogContent(feed.id, 10).then(function(content) {
-				content.blogs.forEach(function(blog) {
-					blog = new Blog(blog);
-				});
-				actions._feedLoaded(feed, content);
+			actions._loadBlogContent(feed.id, 10).then(function(blogContent) {
+				actions._feedSelected(feed, blogContent);
 			})
 		}
 	},
+
+	loadBlogContent: function(feedId, count) {
+		return this._loadBlogContent(feedId, count).then(function(blogContent) {
+			AppDispatcher.dispatch({
+				actionType: 'LOAD_BLOGS',
+				blogContent: {
+					blogs: blogContent.blogs,
+					feedId: blogContent.feedId,
+					blogCount: blogContent.blogCount
+				}
+			})
+		});
+	},
+
 
 	/**
 	 * Update feed content
@@ -108,13 +119,19 @@ var FeedActions = {
 	 * Load blog content from "blog" table for a specific feed
 	 * @param feed
 	 */
-	loadBlogContent: function(feedId, count) {
+	_loadBlogContent: function(feedId, count) {
 		return fetch('/api/feed/'+feedId+'/blogs?count=' + count).then(function(res) {
 			if (res.status == 200) {
+
 				return res.json();
 			}else {
 				return res.json().then(Promise.reject.bind(Promise));
 			}
+		}).then(function(blogContent) {
+			blogContent.blogs.forEach(function(blog) {
+				blog = new Blog(blog);
+			});
+			return blogContent;
 		});
 	},
 
@@ -144,10 +161,13 @@ var FeedActions = {
 		});
 	},
 
-	_feedLoaded: function(feed, fetchResult) {
+	_feedSelected: function(feed, fetchResult) {
 		AppDispatcher.dispatch({
 			actionType: 'SELECT_FEED',
-			feed: feed,
+			feed: feed
+		});
+		AppDispatcher.dispatch({
+			actionType: 'LOAD_BLOGS',
 			blogContent: {
 				blogs: fetchResult.blogs,
 				feedId: fetchResult.feedId,

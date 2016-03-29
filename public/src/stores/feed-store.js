@@ -41,9 +41,13 @@ AppDispatcher.register(function(action) {
 	switch(action.actionType) {
 		case 'SELECT_FEED':
 			_feedsState.currentFeed = action.feed;
+			FeedStore.emitChange();
+			break;
+
+		case 'LOAD_BLOGS':
 			_feedsState.blogContent.blogs = action.blogContent.blogs;
 			_feedsState.blogContent.blogCount = action.blogContent.blogCount;
-			_feedsState.blogContent.feedId = action.feed.id;
+			_feedsState.blogContent.feedId = action.blogContent.feedId;
 			FeedStore.emitChange();
 			break;
 

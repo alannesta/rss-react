@@ -4,7 +4,9 @@ var FeedActions = require('../actions/feed-actions');
 var FeedContent = React.createClass({
 
 	loadMore: function() {
-		FeedActions.loadBlogContent(this.props.blogContent.feedId, this.props.blogContent.blogs.length + 10);
+		if (this.props.blogContent.blogs.length < this.props.blogContent.blogCount) {
+			FeedActions.loadBlogContent(this.props.blogContent.feedId, this.props.blogContent.blogs.length + 10);
+		}
 	},
 
 	render: function() {
@@ -24,9 +26,7 @@ var FeedContent = React.createClass({
 		});
 
 		if (this.props.blogContent.blogs.length < this.props.blogContent.blogCount) {
-			loadMoreButton = <section className="feed-content-loadmore"><button>Load More</button></section>;
-		} else {
-			loadMoreButton = <span></span>;
+			loadMoreButton = <section className="feed-content-loadmore"><button onClick={this.loadMore}>Load More</button></section>;
 		}
 
 		return (
