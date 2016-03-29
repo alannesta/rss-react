@@ -41,10 +41,17 @@ var FeedActions = {
 		if (actions._needReloadFeed(feed)) {
 		//if (true) {
 			FeedUtil.loadFeed(feed.feedUrl).then(function(content) {
-				var blogs = content.map(function(blog) {
+				blogs = content.map(function(blog) {
 					return new Blog(blog);
 				});
-				actions._feedLoaded(feed, blogs);
+
+				var fetchResult = {
+					blogs: blogs,
+					feedId: feed.id,
+					blogCount: 20		// hacky, return a fake total amount without reading from the database
+				};
+
+				actions._feedLoaded(feed, fetchResult);
 				actions.saveBlogContent(feed.id, blogs).then(function(updatedFeed) {
 					AppDispatcher.dispatch({
 						actionType: "UPDATE_FEED",
@@ -55,10 +62,10 @@ var FeedActions = {
 		}else {
 			// load the last 10 blogs from database
 			actions.loadBlogContent(feed.id, 10).then(function(content) {
-				var blogs = content.map(function(blog) {
-					return new Blog(blog);
+				content.blogs.forEach(function(blog) {
+					blog = new Blog(blog);
 				});
-				actions._feedLoaded(feed, blogs);
+				actions._feedLoaded(feed, content);
 			})
 		}
 	},
@@ -137,11 +144,15 @@ var FeedActions = {
 		});
 	},
 
-	_feedLoaded: function(feed, blogs) {
+	_feedLoaded: function(feed, fetchResult) {
 		AppDispatcher.dispatch({
 			actionType: 'SELECT_FEED',
 			feed: feed,
-			blogs: blogs
+			blogContent: {
+				blogs: fetchResult.blogs,
+				feedId: fetchResult.feedId,
+				blogCount: fetchResult.blogCount
+			}
 		});
 		AppDispatcher.dispatch({
 			actionType: 'CONTENT_LOADED',

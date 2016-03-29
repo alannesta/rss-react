@@ -9,7 +9,11 @@ var _feedsState = {
 	currentFeed: {},
 	allFeeds: [],
 	//feedContent: []
-	blogs: []
+	blogContent: {
+		blogCount: 0,
+		blogs: [],
+		feedId: -1
+	}
 };
 
 var feed_mixin = _.extend({}, EventEmitter.prototype);
@@ -37,7 +41,9 @@ AppDispatcher.register(function(action) {
 	switch(action.actionType) {
 		case 'SELECT_FEED':
 			_feedsState.currentFeed = action.feed;
-			_feedsState.blogs = action.blogs;
+			_feedsState.blogContent.blogs = action.blogContent.blogs;
+			_feedsState.blogContent.blogCount = action.blogContent.blogCount;
+			_feedsState.blogContent.feedId = action.feed.id;
 			FeedStore.emitChange();
 			break;
 
