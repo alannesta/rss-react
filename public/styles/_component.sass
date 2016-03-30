@@ -1,0 +1,62 @@
+.backdrop
+  display: none
+  position: fixed
+  left: 0px
+  right: 0px
+  top: 0px
+  bottom: 0px
+  background-color: #aaaaaa
+  opacity: 0.8
+
+.add-feed-modal
+  display: none
+  position: absolute
+  z-index: 100
+  top: 50px
+  width: 30%
+  left: 30%
+  background-color: white
+
+.modal-shown
+  .backdrop
+    display: block
+  .add-feed-modal
+    display: block
+
+#toast-container
+  position: fixed
+  top: 100px
+  left: 50%
+  width: 200px
+  margin-left: -100px
+  display: flex
+  flex-direction: column
+  justify-content: center
+  align-content: center
+  .toast-content
+    position: relative
+    padding: 10px
+    height: 50px
+    margin: auto
+    background-color: lightblue
+    border: 2px solid lightblue
+    font-style: italic
+    font-weight: bolder
+    animation: fadeInsideOut 2s
+
+
+@keyframes fadeInsideOut
+  0%
+    opacity: 0
+    transform: translateX(-20px)
+  25%
+    opacity: 1
+    transform: translateX(0)
+
+  75%
+    opacity: 1
+    transform: translateX(0)
+
+  100%
+    opacity: 0
+    transform: translateX(20px)

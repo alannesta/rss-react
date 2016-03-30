@@ -106,7 +106,7 @@ var FeedActions = {
 			// unix timestamp compare, refresh if time span is greater than 12 hours
 			var now = Date.now();
 			var lastUpdate = Date.parse(feed.lastUpdate);
-			if ((now - lastUpdate) < 1800000) {
+			if ((now - lastUpdate) < 7200000) {
 				console.log('last updated ' + (now - lastUpdate)/3600000 + 'hours ago, load blogs from database');
 				return false;
 			}
