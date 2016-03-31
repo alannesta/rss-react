@@ -166,17 +166,18 @@ var FeedActions = {
 			if (res.status == 200) {
 				return res.json();
 			}else {
-				AppDispatcher.dispatch({
-					actionType: 'SHOW_MODAL',
-					content: 'Fail to subscribe to feed',
-					modalType: 'ERROR'
-				});
 				return res.json().then(Promise.reject.bind(Promise));
 			}
 		}).then(function(feed) {
 			var subscribedFeed = new Feed(feed);
 			actions.fetch().then(actions.selectFeed.bind(actions, subscribedFeed));
 			ViewActions.showToast('Feed subscribed successfully');
+		}, function() {
+			AppDispatcher.dispatch({
+				actionType: 'SHOW_MODAL',
+				content: 'Fail to subscribe to feed',
+				modalType: 'ERROR'
+			});
 		});
 
 	},
