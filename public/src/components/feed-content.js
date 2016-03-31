@@ -1,11 +1,11 @@
 var React = require('react');
-var FeedActions = require('../actions/feed-actions');
+var BlogActions = require('../actions/blog-actions');
 
 var FeedContent = React.createClass({
 
 	loadMore: function() {
 		if (this.props.blogContent.blogs.length < this.props.blogContent.blogCount) {
-			FeedActions.loadBlogContent(this.props.blogContent.feedId, this.props.blogContent.blogs.length + 10);
+			BlogActions.loadBlogContent(this.props.blogContent.feedId, this.props.blogContent.blogs.length + 10);
 		}
 	},
 

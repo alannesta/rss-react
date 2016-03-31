@@ -1,6 +1,7 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var FeedUtil = require('../utils/feed-util');
 var ViewActions = require('./view-actions');
+var BlogActions = require('./blog-actions');
 var Feed = require('../models/feed');
 var Blog = require('../models/blog');
 
@@ -51,8 +52,19 @@ var FeedActions = {
 					blogCount: 20		// hacky, return a fake total amount without reading from the database
 				};
 
-				actions._feedSelected(feed, fetchResult);
-				actions.saveBlogContent(feed.id, blogs).then(function(updatedFeed) {
+				//refresh app states
+				AppDispatcher.dispatch({
+					actionType: 'LOAD_BLOGS',
+					blogContent: {
+						blogs: fetchResult.blogs,
+						feedId: fetchResult.feedId,
+						blogCount: fetchResult.blogCount
+					}
+				});
+				actions._feedSelected(feed);
+
+				// save blog content and update feed timestamp
+				BlogActions.saveBlogContent(feed.id, blogs).then(function(updatedFeed) {
 					AppDispatcher.dispatch({
 						actionType: "UPDATE_FEED",
 						feed: new Feed(updatedFeed[0])
@@ -61,25 +73,11 @@ var FeedActions = {
 			});
 		}else {
 			// load the last 10 blogs from database
-			actions._loadBlogContent(feed.id, 10).then(function(blogContent) {
-				actions._feedSelected(feed, blogContent);
+			BlogActions.loadBlogContent(feed.id, 10).then(function() {
+				actions._feedSelected(feed);
 			})
 		}
 	},
-
-	loadBlogContent: function(feedId, count) {
-		return this._loadBlogContent(feedId, count).then(function(blogContent) {
-			AppDispatcher.dispatch({
-				actionType: 'LOAD_BLOGS',
-				blogContent: {
-					blogs: blogContent.blogs,
-					feedId: blogContent.feedId,
-					blogCount: blogContent.blogCount
-				}
-			})
-		});
-	},
-
 
 	/**
 	 * Update feed content
@@ -115,64 +113,10 @@ var FeedActions = {
 		return true;
 	},
 
-	/**
-	 * Load blog content from "blog" table for a specific feed
-	 * @param feed
-	 */
-	_loadBlogContent: function(feedId, count) {
-		return fetch('/api/feed/'+feedId+'/blogs?count=' + count).then(function(res) {
-			if (res.status == 200) {
-
-				return res.json();
-			}else {
-				return res.json().then(Promise.reject.bind(Promise));
-			}
-		}).then(function(blogContent) {
-			blogContent.blogs.forEach(function(blog) {
-				blog = new Blog(blog);
-			});
-			return blogContent;
-		});
-	},
-
-	/**
-	 * Persist blogs for a specific feed to the database
-	 * @param blogs
-	 */
-	saveBlogContent: function(feedId, blogs) {
-		var strippedBlogs = blogs.map(function(blog) {
-			return blog = {
-				feed_id: feedId,
-				blog_url: blog.blog_url,
-				blog_title: blog.blog_title,
-				blog_digest: blog.blog_digest,
-				post_date: new Date(Date.parse(blog.post_date))
-			};
-		});
-		return fetch('/api/feed/' + feedId + '/blogs', {
-			method: 'post',
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(strippedBlogs)
-		}).then(function(res) {
-			return res.json();
-		});
-	},
-
-	_feedSelected: function(feed, fetchResult) {
+	_feedSelected: function(feed) {
 		AppDispatcher.dispatch({
 			actionType: 'SELECT_FEED',
 			feed: feed
-		});
-		AppDispatcher.dispatch({
-			actionType: 'LOAD_BLOGS',
-			blogContent: {
-				blogs: fetchResult.blogs,
-				feedId: fetchResult.feedId,
-				blogCount: fetchResult.blogCount
-			}
 		});
 		AppDispatcher.dispatch({
 			actionType: 'CONTENT_LOADED',
