@@ -39,44 +39,48 @@ var FeedActions = {
 			feed: feed
 		});
 
-		if (actions._needReloadFeed(feed)) {
-		//if (true) {
-			FeedUtil.loadFeed(feed.feedUrl).then(function(content) {
-				blogs = content.map(function(blog) {
-					return new Blog(blog);
-				});
+		BlogActions.loadBlogContent(feed).then(function() {
+			actions._feedSelected(feed);
+		});
 
-				var fetchResult = {
-					blogs: blogs,
-					feedId: feed.id,
-					blogCount: 20		// hacky, return a fake total amount without reading from the database
-				};
-
-				//refresh app states
-				AppDispatcher.dispatch({
-					actionType: 'LOAD_BLOGS',
-					blogContent: {
-						blogs: fetchResult.blogs,
-						feedId: fetchResult.feedId,
-						blogCount: fetchResult.blogCount
-					}
-				});
-				actions._feedSelected(feed);
-
-				// save blog content and update feed timestamp
-				BlogActions.saveBlogContent(feed.id, blogs).then(function(updatedFeed) {
-					AppDispatcher.dispatch({
-						actionType: "UPDATE_FEED",
-						feed: new Feed(updatedFeed[0])
-					});
-				});
-			});
-		}else {
-			// load the last 10 blogs from database
-			BlogActions.loadBlogContent(feed.id, 10).then(function() {
-				actions._feedSelected(feed);
-			})
-		}
+		//if (actions._needReloadFeed(feed)) {
+		////if (true) {
+		//	FeedUtil.loadFeed(feed.feedUrl).then(function(content) {
+		//		blogs = content.map(function(blog) {
+		//			return new Blog(blog);
+		//		});
+		//
+		//		var fetchResult = {
+		//			blogs: blogs,
+		//			feedId: feed.id,
+		//			blogCount: 20		// hacky, return a fake total amount without reading from the database
+		//		};
+		//
+		//		//refresh app states
+		//		AppDispatcher.dispatch({
+		//			actionType: 'LOAD_BLOGS',
+		//			blogContent: {
+		//				blogs: fetchResult.blogs,
+		//				feedId: fetchResult.feedId,
+		//				blogCount: fetchResult.blogCount
+		//			}
+		//		});
+		//		actions._feedSelected(feed);
+		//
+		//		// save blog content and update feed timestamp
+		//		BlogActions.saveBlogContent(feed.id, blogs).then(function(updatedFeed) {
+		//			AppDispatcher.dispatch({
+		//				actionType: "UPDATE_FEED",
+		//				feed: new Feed(updatedFeed[0])
+		//			});
+		//		});
+		//	});
+		//}else {
+		//	// load the last 10 blogs from database
+		//	BlogActions.loadBlogContent(feed.id, 10).then(function() {
+		//		actions._feedSelected(feed);
+		//	})
+		//}
 	},
 
 	/**
@@ -95,23 +99,23 @@ var FeedActions = {
 		});
 	},
 
-	/**
-	 * Check last_update time stamp of feed
-	 * @param feed
-	 */
-	_needReloadFeed: function(feed) {
-		if (feed.lastUpdate) {
-			// unix timestamp compare, refresh if time span is greater than 12 hours
-			var now = Date.now();
-			var lastUpdate = Date.parse(feed.lastUpdate);
-			if ((now - lastUpdate) < 7200000) {
-				console.log('last updated ' + (now - lastUpdate)/3600000 + 'hours ago, load blogs from database');
-				return false;
-			}
-		}
-		console.log('reload blogs using google api');
-		return true;
-	},
+	///**
+	// * Check last_update time stamp of feed
+	// * @param feed
+	// */
+	//_needReloadFeed: function(feed) {
+	//	if (feed.lastUpdate) {
+	//		// unix timestamp compare, refresh if time span is greater than 12 hours
+	//		var now = Date.now();
+	//		var lastUpdate = Date.parse(feed.lastUpdate);
+	//		if ((now - lastUpdate) < 7200000) {
+	//			console.log('last updated ' + (now - lastUpdate)/3600000 + 'hours ago, load blogs from database');
+	//			return false;
+	//		}
+	//	}
+	//	console.log('reload blogs using google api');
+	//	return true;
+	//},
 
 	_feedSelected: function(feed) {
 		AppDispatcher.dispatch({
