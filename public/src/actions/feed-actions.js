@@ -54,6 +54,8 @@ var FeedActions = {
 						feed: updatedFeed
 					})
 				})
+			}else {
+				actions._feedSelected(feed);
 			}
 		});
 	},
@@ -62,7 +64,6 @@ var FeedActions = {
 	 * Update feed content
 	 */
 	updateFeed: function(feed) {
-		console.log('in');
 		return fetch('/api/feed/' + feed.id, {
 			method: 'post',
 			headers: {
