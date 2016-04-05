@@ -10,25 +10,16 @@ var BlogActions = {
 	loadBlogContent: function(feed) {
 		if (this._needReloadFeed(feed)){
 			return FeedUtil.loadFeed(feed.feedUrl).then(function(content) {
-				blogs = content.map(function(blog) {
-					return new Blog(blog);
-				});
-
-				var fetchResult = {
-					blogs: blogs,
-					feedId: feed.id,
-					blogCount: 20		// hacky, return a fake total amount without reading from the database
-				};
 
 				//refresh app states
-				AppDispatcher.dispatch({
-					actionType: 'LOAD_BLOGS',
-					blogContent: {
-						blogs: fetchResult.blogs,
-						feedId: fetchResult.feedId,
-						blogCount: fetchResult.blogCount
-					}
-				});
+				//AppDispatcher.dispatch({
+				//	actionType: 'LOAD_BLOGS',
+				//	blogContent: {
+				//		blogs: fetchResult.blogs,
+				//		feedId: fetchResult.feedId,
+				//		blogCount: fetchResult.blogCount
+				//	}
+				//});
 
 				//TODO:
 				// should be a 2 step process: saveBlogContent.then(function({blogCount: xxx}) {
@@ -38,18 +29,47 @@ var BlogActions = {
 				// })
 
 				// save blog content and update feed timestamp
-				BlogActions.saveBlogContent(feed.id, blogs).then(function(updatedFeed) {
-					console.log('util load completed, saved blog content and updated time stamp');
-					AppDispatcher.dispatch({
-						actionType: "UPDATE_FEED",
-						feed: new Feed(updatedFeed[0])
-					});
-				});
+				//BlogActions.saveBlogContent(feed.id, blogs).then(function(updatedFeed) {
+				//	console.log('util load completed, saved blog content and updated time stamp');
+				//	AppDispatcher.dispatch({
+				//		actionType: "UPDATE_FEED",
+				//		feed: new Feed(updatedFeed[0])
+				//	});
+				//});
+				return BlogActions.saveBlogContent(feed.id, blogs).then(function(saveResult) {
 
-				return Promise.resolve();
+					blogs = content.map(function(blog) {
+						return new Blog(blog);
+					});
+
+					var fetchResult = {
+						blogs: blogs,
+						feedId: feed.id,
+						blogCount: saveResult.blogCount
+					};
+
+					AppDispatcher.dispatch({
+						actionType: 'LOAD_BLOGS',
+						blogContent: {
+							blogs: fetchResult.blogs,
+							feedId: fetchResult.feedId,
+							blogCount: fetchResult.blogCount
+						}
+					});
+
+					BlogActions._cacheBlogContent(fetchResult);
+
+					return FeedActions.updateFeed(feed).then(function(feedUpdated) {
+						AppDispatcher.dispatch({
+							actionType: "UPDATE_FEED",
+							feed: new Feed(feedUpdated[0])
+						});
+						return Promise.resolve();
+					})
+				});
 			});
 		} else {
-			return this._loadBlogContent(feed).then(function(blogContent) {
+			return this.loadBlogContentFromStorage(feed).then(function(blogContent) {
 				AppDispatcher.dispatch({
 					actionType: 'LOAD_BLOGS',
 					blogContent: {
@@ -58,7 +78,6 @@ var BlogActions = {
 						blogCount: blogContent.blogCount
 					}
 				});
-
 				return Promise.resolve();
 			});
 		}
@@ -130,11 +149,11 @@ var BlogActions = {
 	 * @returns {*}
 	 * @private
 	 */
-	_loadBlogContent: function(feed) {
+	loadBlogContentFromStorage: function(feedId, count) {
 		var blogCache;
 		var actions = this;
 
-		if ((blogCache = window.localStorage.getItem('feed-content::'+feed.id)) !== null) {
+		if (!count && (blogCache = window.localStorage.getItem('feed-content::'+feedId)) !== null) {
 
 			console.log('load feeds from localStorage');
 			// read from local storage
@@ -148,7 +167,7 @@ var BlogActions = {
 				blogCount: blogContent.blogCount
 			});
 		} else {
-			return fetch('/api/feed/' + feed.id + '/blogs?count=' + DEFAULT_BLOG_COUNT).then(function(res) {
+			return fetch('/api/feed/' + feedId + '/blogs?count=' + (count || DEFAULT_BLOG_COUNT)).then(function(res) {
 				if (res.status == 200) {
 
 					return res.json();
@@ -156,9 +175,6 @@ var BlogActions = {
 					return res.json().then(Promise.reject.bind(Promise));
 				}
 			}).then(function(blogContent) {
-				// save to local storage
-				actions._cacheBlogContent(blogContent);
-
 				blogContent.blogs.forEach(function(blog) {
 					blog = new Blog(blog);
 				});

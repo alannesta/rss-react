@@ -5,7 +5,7 @@ var FeedContent = React.createClass({
 
 	loadMore: function() {
 		if (this.props.blogContent.blogs.length < this.props.blogContent.blogCount) {
-			BlogActions.loadBlogContent(this.props.blogContent.feedId, this.props.blogContent.blogs.length + 10);
+			BlogActions.loadBlogContentFromStorage(this.props.blogContent.feedId, this.props.blogContent.blogs.length + 10);
 		}
 	},
 
