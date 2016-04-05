@@ -59,7 +59,8 @@ var BlogActions = {
 
 					BlogActions._cacheBlogContent(fetchResult);
 
-					return FeedActions.updateFeed(feed).then(function(feedUpdated) {
+					// TODO: how to update the feed?
+					return FeedActions.updateFeed().then(function(feedUpdated) {
 						AppDispatcher.dispatch({
 							actionType: "UPDATE_FEED",
 							feed: new Feed(feedUpdated[0])
