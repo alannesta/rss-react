@@ -7,20 +7,6 @@ var DEFAULT_BLOG_COUNT = 10;
 
 var BlogActions = {
 
-	//loadBlogContent: function(feedId, count) {
-	//
-	//	return this._loadBlogContent(feedId, count).then(function(blogContent) {
-	//		AppDispatcher.dispatch({
-	//			actionType: 'LOAD_BLOGS',
-	//			blogContent: {
-	//				blogs: blogContent.blogs,
-	//				feedId: blogContent.feedId,
-	//				blogCount: blogContent.blogCount
-	//			}
-	//		})
-	//	});
-	//},
-
 	loadBlogContent: function(feed) {
 		if (this._needReloadFeed(feed)){
 			return FeedUtil.loadFeed(feed.feedUrl).then(function(content) {
@@ -43,15 +29,24 @@ var BlogActions = {
 						blogCount: fetchResult.blogCount
 					}
 				});
+
+				//TODO:
+				// should be a 2 step process: saveBlogContent.then(function({blogCount: xxx}) {
+				//		1. dispatch load blogs action
+				//		2. cache blogs to local
+				//		update feed time stamp	// one more api call
+				// })
+
 				// save blog content and update feed timestamp
 				BlogActions.saveBlogContent(feed.id, blogs).then(function(updatedFeed) {
+					console.log('util load completed, saved blog content and updated time stamp');
 					AppDispatcher.dispatch({
 						actionType: "UPDATE_FEED",
 						feed: new Feed(updatedFeed[0])
 					});
 				});
 
-				return true;
+				return Promise.resolve();
 			});
 		} else {
 			return this._loadBlogContent(feed).then(function(blogContent) {
@@ -63,7 +58,8 @@ var BlogActions = {
 						blogCount: blogContent.blogCount
 					}
 				});
-				return true;
+
+				return Promise.resolve();
 			});
 		}
 
@@ -100,17 +96,6 @@ var BlogActions = {
 			};
 		});
 
-		//try {
-		//	var cacheObj = {
-		//		blogs: strippedBlogs,
-		//		count:
-		//	}
-		//	var localContent = JSON.stringify(strippedBlogs);
-		//	window.localStorage.setItem('feed-content::' + feedId, localContent);
-		//} catch (err) {
-		//	console.error('Local Storage Exception: ', err);
-		//}
-
 		return fetch('/api/feed/' + feedId + '/blogs', {
 			method: 'post',
 			headers: {
@@ -123,11 +108,35 @@ var BlogActions = {
 		});
 	},
 
+	/**
+	 * save to local storage
+	 * @param blogContent {object} for example, {feedId: 3, blogs: [], blogCount: 15}
+	 * @private
+	 */
+	_cacheBlogContent: function(blogContent) {
+		try {
+			var lsContent = JSON.stringify(blogContent);
+			window.localStorage.setItem('feed-content::' + blogContent.feedId, lsContent);
+		} catch (err) {
+			console.error('Local Storage Exception: ', err);
+		}
 
-	// localStorage vs DB access
+	},
+
+	/**
+	 *
+	 * @param feed
+	 * @param loadMore {boolean} optional flags to signify if it is a "load more" action (if so, execute a db query)
+	 * @returns {*}
+	 * @private
+	 */
 	_loadBlogContent: function(feed) {
 		var blogCache;
+		var actions = this;
+
 		if ((blogCache = window.localStorage.getItem('feed-content::'+feed.id)) !== null) {
+
+			console.log('load feeds from localStorage');
 			// read from local storage
 			var blogContent = JSON.parse(blogCache);
 			blogContent.blogs.forEach(function(blog) {
@@ -147,29 +156,17 @@ var BlogActions = {
 					return res.json().then(Promise.reject.bind(Promise));
 				}
 			}).then(function(blogContent) {
+				// save to local storage
+				actions._cacheBlogContent(blogContent);
+
 				blogContent.blogs.forEach(function(blog) {
 					blog = new Blog(blog);
 				});
+
 				return blogContent;
 			});
 		}
 	}
-
-	//_loadBlogContent: function(feedId, count) {
-	//	return fetch('/api/feed/' + feedId + '/blogs?count=' + count).then(function(res) {
-	//		if (res.status == 200) {
-	//
-	//			return res.json();
-	//		} else {
-	//			return res.json().then(Promise.reject.bind(Promise));
-	//		}
-	//	}).then(function(blogContent) {
-	//		blogContent.blogs.forEach(function(blog) {
-	//			blog = new Blog(blog);
-	//		});
-	//		return blogContent;
-	//	});
-	//}
 
 };
 

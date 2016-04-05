@@ -118,6 +118,7 @@ var FeedActions = {
 	//},
 
 	_feedSelected: function(feed) {
+		console.log('dispatching "feed selected" event');
 		AppDispatcher.dispatch({
 			actionType: 'SELECT_FEED',
 			feed: feed
