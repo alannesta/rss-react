@@ -39,8 +39,22 @@ var FeedActions = {
 			feed: feed
 		});
 
-		BlogActions.loadBlogContent(feed).then(function() {
-			actions._feedSelected(feed);
+		BlogActions.loadBlogContent(feed).then(function(response) {
+			if (response.updateFeed) {
+				var feedToUpdate = Object.assign({}, feed, {
+					lastUpdate: new Date()
+				});
+				actions.updateFeed(feedToUpdate).then(function(updatedFeed) {
+					var updatedFeed = new Feed(updatedFeed);
+					console.log('updatedFeed', updatedFeed);
+
+					actions._feedSelected(updatedFeed);
+					AppDispatcher.dispatch({
+						actionType: 'UPDATE_FEED',
+						feed: updatedFeed
+					})
+				})
+			}
 		});
 	},
 
@@ -48,6 +62,7 @@ var FeedActions = {
 	 * Update feed content
 	 */
 	updateFeed: function(feed) {
+		console.log('in');
 		return fetch('/api/feed/' + feed.id, {
 			method: 'post',
 			headers: {
@@ -55,8 +70,12 @@ var FeedActions = {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify(feed)
-		}, function(res) {
-			console.log(res.status);
+		}).then(function(res) {
+			if (res.status == 200) {
+				return res.json();
+			} else {
+				return res.json().then(Promise.reject.bind(Promise));
+			}
 		});
 	},
 

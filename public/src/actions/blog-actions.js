@@ -10,7 +10,9 @@ var BlogActions = {
 	loadBlogContent: function(feed) {
 		if (this._needReloadFeed(feed)){
 			return FeedUtil.loadFeed(feed.feedUrl).then(function(content) {
-
+				var blogs = content.map(function(blog) {
+					return new Blog(blog);
+				});
 				//refresh app states
 				//AppDispatcher.dispatch({
 				//	actionType: 'LOAD_BLOGS',
@@ -37,11 +39,6 @@ var BlogActions = {
 				//	});
 				//});
 				return BlogActions.saveBlogContent(feed.id, blogs).then(function(saveResult) {
-
-					blogs = content.map(function(blog) {
-						return new Blog(blog);
-					});
-
 					var fetchResult = {
 						blogs: blogs,
 						feedId: feed.id,
@@ -59,18 +56,11 @@ var BlogActions = {
 
 					BlogActions._cacheBlogContent(fetchResult);
 
-					// TODO: how to update the feed?
-					return FeedActions.updateFeed().then(function(feedUpdated) {
-						AppDispatcher.dispatch({
-							actionType: "UPDATE_FEED",
-							feed: new Feed(feedUpdated[0])
-						});
-						return Promise.resolve();
-					})
+					return Promise.resolve({updateFeed: true});
 				});
 			});
 		} else {
-			return this.loadBlogContentFromStorage(feed).then(function(blogContent) {
+			return this.loadBlogContentFromStorage(feed.id).then(function(blogContent) {
 				AppDispatcher.dispatch({
 					actionType: 'LOAD_BLOGS',
 					blogContent: {
@@ -79,7 +69,7 @@ var BlogActions = {
 						blogCount: blogContent.blogCount
 					}
 				});
-				return Promise.resolve();
+				return Promise.resolve({updateFeed: false});
 			});
 		}
 
