@@ -42,11 +42,10 @@ var FeedActions = {
 		BlogActions.loadBlogContent(feed).then(function(response) {
 			if (response.updateFeed) {
 				var feedToUpdate = Object.assign({}, feed, {
-					lastUpdate: new Date()
+					lastUpdate: Math.floor(Date.now()/1000)		// seconds level unix timestamp
 				});
 				actions.updateFeed(feedToUpdate).then(function(updatedFeed) {
 					var updatedFeed = new Feed(updatedFeed);
-					console.log('updatedFeed', updatedFeed);
 
 					actions._feedSelected(updatedFeed);
 					AppDispatcher.dispatch({
@@ -81,7 +80,6 @@ var FeedActions = {
 	},
 
 	_feedSelected: function(feed) {
-		console.log('dispatching "feed selected" event');
 		AppDispatcher.dispatch({
 			actionType: 'SELECT_FEED',
 			feed: feed

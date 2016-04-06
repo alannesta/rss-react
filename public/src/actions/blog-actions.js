@@ -13,31 +13,7 @@ var BlogActions = {
 				var blogs = content.map(function(blog) {
 					return new Blog(blog);
 				});
-				//refresh app states
-				//AppDispatcher.dispatch({
-				//	actionType: 'LOAD_BLOGS',
-				//	blogContent: {
-				//		blogs: fetchResult.blogs,
-				//		feedId: fetchResult.feedId,
-				//		blogCount: fetchResult.blogCount
-				//	}
-				//});
 
-				//TODO:
-				// should be a 2 step process: saveBlogContent.then(function({blogCount: xxx}) {
-				//		1. dispatch load blogs action
-				//		2. cache blogs to local
-				//		update feed time stamp	// one more api call
-				// })
-
-				// save blog content and update feed timestamp
-				//BlogActions.saveBlogContent(feed.id, blogs).then(function(updatedFeed) {
-				//	console.log('util load completed, saved blog content and updated time stamp');
-				//	AppDispatcher.dispatch({
-				//		actionType: "UPDATE_FEED",
-				//		feed: new Feed(updatedFeed[0])
-				//	});
-				//});
 				return BlogActions.saveBlogContent(feed.id, blogs).then(function(saveResult) {
 					var fetchResult = {
 						blogs: blogs,
@@ -53,24 +29,14 @@ var BlogActions = {
 							blogCount: fetchResult.blogCount
 						}
 					});
-
+					console.log('load blogs from api, caching in local storage');
 					BlogActions._cacheBlogContent(fetchResult);
 
 					return Promise.resolve({updateFeed: true});
 				});
 			});
 		} else {
-			return this.loadBlogContentFromStorage(feed.id).then(function(blogContent) {
-				AppDispatcher.dispatch({
-					actionType: 'LOAD_BLOGS',
-					blogContent: {
-						blogs: blogContent.blogs,
-						feedId: blogContent.feedId,
-						blogCount: blogContent.blogCount
-					}
-				});
-				return Promise.resolve({updateFeed: false});
-			});
+			return this.loadBlogContentFromStorage(feed.id);
 		}
 
 	},
@@ -81,13 +47,12 @@ var BlogActions = {
 			// unix timestamp compare, refresh if time span is greater than 12 hours
 			var now = Date.now();
 			var lastUpdate = Date.parse(feed.lastUpdate);
-			//if ((now - lastUpdate) < 7200000) {
-			if ((now - lastUpdate) < 72000) {
-				console.log('last updated ' + (now - lastUpdate)/3600000 + 'hours ago, load blogs from database');
+			if ((now - lastUpdate) < 7200000) {
+			//if ((now - lastUpdate) < 72000) {
+				console.log('last updated ' + (now - lastUpdate)/3600000 + 'hours ago, load blogs from local/DB');
 				return false;
 			}
 		}
-		console.log('reload blogs using google api');
 		return true;
 	},
 
@@ -142,7 +107,6 @@ var BlogActions = {
 	 */
 	loadBlogContentFromStorage: function(feedId, count) {
 		var blogCache;
-		var actions = this;
 
 		if (!count && (blogCache = window.localStorage.getItem('feed-content::'+feedId)) !== null) {
 
@@ -152,15 +116,23 @@ var BlogActions = {
 			blogContent.blogs.forEach(function(blog) {
 				blog = new Blog(blog);
 			});
-			return Promise.resolve({
-				blogs: blogContent.blogs,
-				feedId: blogContent.feedId,
-				blogCount: blogContent.blogCount
+
+			AppDispatcher.dispatch({
+				actionType: 'LOAD_BLOGS',
+				blogContent: {
+					blogs: blogContent.blogs,
+					feedId: blogContent.feedId,
+					blogCount: blogContent.blogCount
+				}
 			});
+
+			return Promise.resolve({updateFeed: false});	// signals that it is not updated through google api, no need to update feed timestamp
+
 		} else {
+			console.log('load blogs from DB');
+
 			return fetch('/api/feed/' + feedId + '/blogs?count=' + (count || DEFAULT_BLOG_COUNT)).then(function(res) {
 				if (res.status == 200) {
-
 					return res.json();
 				} else {
 					return res.json().then(Promise.reject.bind(Promise));
@@ -169,8 +141,15 @@ var BlogActions = {
 				blogContent.blogs.forEach(function(blog) {
 					blog = new Blog(blog);
 				});
-
-				return blogContent;
+				AppDispatcher.dispatch({
+					actionType: 'LOAD_BLOGS',
+					blogContent: {
+						blogs: blogContent.blogs,
+						feedId: blogContent.feedId,
+						blogCount: blogContent.blogCount
+					}
+				});
+				return Promise.resolve({updateFeed: false});
 			});
 		}
 	}
