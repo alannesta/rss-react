@@ -3,7 +3,7 @@ var Blog = require('../models/blog');
 var Feed = require('../models/feed');
 var FeedUtil = require('../utils/feed-util');
 
-var DEFAULT_BLOG_COUNT = 10;
+const DEFAULT_BLOG_COUNT = 10;
 
 var BlogActions = {
 
