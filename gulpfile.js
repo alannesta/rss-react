@@ -4,12 +4,14 @@ var gulp = require('gulp');
 var runSequence = require('run-sequence');
 var nodemon = require('gulp-nodemon');
 var browserify = require('browserify');
-var reactify = require('reactify');
 var source = require('vinyl-source-stream');
 var sass = require('gulp-sass');
 var postcss = require('gulp-postcss');
 var autoprefixer = require('autoprefixer');
 var path = require('path');
+
+var sourcemaps = require("gulp-sourcemaps");
+var babelify = require("babelify");
 
 //var KarmaServer = require('karma').Server;
 
@@ -17,7 +19,7 @@ var dest = path.join(__dirname, 'public/dist');
 
 gulp.task('default', function(cb) {
 	//runSequence('install', 'index', 'watch', 'serve', cb);
-	runSequence('build-app', 'sass', 'serve', 'watch', cb);
+	runSequence('build-app', 'sass', cb);
 });
 
 gulp.task('dist', function(cb) {
@@ -31,14 +33,27 @@ gulp.task('watch', function() {
 
 });
 
-// bundle applicatio code
+// bundle application code
 gulp.task('build-app', function() {
 
+	var externalLib = ['react', 'jquery', 'react-dom', 'flux', 'q'];
+
+	// build external libs;
+	var a = browserify();
+
+	a.require(externalLib);
+
+	a.bundle().pipe(source('vendor.js'))
+		.pipe(gulp.dest(dest));
+
+	// build application bundle
 	var b = browserify(path.join(__dirname, 'public/src/app.js'), {
 		debug: true
 	});
 
-	b.transform(reactify);
+	b.external(externalLib);
+
+	b.transform(babelify);
 
 	return b.bundle()
 		//Pass desired output filename to vinyl-source-stream
@@ -53,19 +68,3 @@ gulp.task('sass', function () {
 		.pipe(postcss([autoprefixer({browsers: ['last 2 versions']})]))
 		.pipe(gulp.dest(dest));
 });
-
-gulp.task('serve', function() {
-	nodemon({
-		script: 'server.js',
-		env: { 'NODE_ENV': 'development' }
-	})
-});
-
-//gulp.task('test', function(cb) {
-//    var server = new KarmaServer({
-//        configFile: __dirname + '/karma.conf.js',
-//        singleRun: true
-//    }, cb);
-//
-//    server.start();
-//});
