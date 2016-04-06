@@ -160,6 +160,9 @@ var FeedActions = {
 					modalType: 'ERROR'
 				});
 			}
+
+			BlogActions.clearBlogCache(feed.id);
+
 			ViewActions.showToast('Feed Deleted Successfully');
 			actions.fetch().then(function(data) {
 				if (reselect) {

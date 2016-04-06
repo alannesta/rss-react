@@ -98,6 +98,11 @@ var BlogActions = {
 
 	},
 
+	// clear when feed is deleted
+	clearBlogCache: function(feedId) {
+		window.localStorage.removeItem('feed-content::'+feedId);
+	},
+
 	/**
 	 *
 	 * @param feed
