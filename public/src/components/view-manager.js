@@ -13,12 +13,13 @@ var ModalStore = require('../stores/modal-store');
 var ToastStore = require('../stores/toast-store');
 var cacheFactory = require('../utils/state-cache');
 
+var assign = require('object-assign');
 var $ = require('jquery');
 
 var ViewManager = React.createClass({
 
 	getInitialState: function() {
-		return Object.assign({}, {modal: ModalStore.getState()}, {toast: ToastStore.getState()});
+		return assign({}, {modal: ModalStore.getState()}, {toast: ToastStore.getState()});
 	},
 
 	componentDidMount: function() {

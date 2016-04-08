@@ -1,5 +1,6 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
+var assign = require('object-assign');
 
 var CHANGE_EVENT = 'change';
 
@@ -9,9 +10,9 @@ var _toastState = {
 
 
 
-var ToastStore = Object.assign({}, EventEmitter.prototype, {
+var ToastStore = assign({}, EventEmitter.prototype, {
 	getState: function() {
-		return Object.assign({}, _toastState);
+		return _toastState;
 	},
 
 	emitChange: function() {

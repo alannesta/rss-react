@@ -1,5 +1,7 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
+var assign = require('object-assign');
+
 
 var CHANGE_EVENT = 'change';
 
@@ -9,7 +11,7 @@ var _modalState = {
 	modalContent: {}
 };
 
-var ModalStore = Object.assign({}, EventEmitter.prototype, {
+var ModalStore = assign({}, EventEmitter.prototype, {
 	getState: function() {
 		return _modalState;
 	},

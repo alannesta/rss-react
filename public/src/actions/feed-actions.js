@@ -4,6 +4,8 @@ var ViewActions = require('./view-actions');
 var BlogActions = require('./blog-actions');
 var Feed = require('../models/feed');
 var Blog = require('../models/blog');
+var fetch = require('isomorphic-fetch');
+var assign = require('object-assign');
 
 var FeedActions = {
 	fetch: function() {
@@ -41,7 +43,7 @@ var FeedActions = {
 
 		BlogActions.loadBlogContent(feed).then(function(response) {
 			if (response.updateFeed) {
-				var feedToUpdate = Object.assign({}, feed, {
+				var feedToUpdate = assign({}, feed, {
 					lastUpdate: Math.floor(Date.now()/1000)		// seconds level unix timestamp
 				});
 				actions.updateFeed(feedToUpdate).then(function(updatedFeed) {

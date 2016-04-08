@@ -2,6 +2,7 @@ var AppDispatcher = require('../dispatcher/AppDispatcher');
 var Blog = require('../models/blog');
 var Feed = require('../models/feed');
 var FeedUtil = require('../utils/feed-util');
+var fetch = require('isomorphic-fetch');
 
 const DEFAULT_BLOG_COUNT = 10;
 
