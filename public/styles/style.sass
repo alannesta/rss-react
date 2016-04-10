@@ -50,7 +50,10 @@ section, div
     padding-left: 0   // freaking list style
 
 .feed-content
+  display: flex
+  flex-direction: column
   flex: 3
+  align-items: center
   overflow-y: scroll
   padding: 5px
   height: 100%
@@ -60,6 +63,16 @@ section, div
     a
       text-decoration: none
       color: black
+  .feed-content-list
+    margin-bottom: 15px
+  .feed-content-loadmore  // "Load More" button
+    display: inline-block
+    background: lightblue
+    padding: 3px
+    line-height: 30px
+    border: 1px solid grey
+    border-radius: 5px
+    cursor: pointer
 
 .feed-nav-item
   display: flex
