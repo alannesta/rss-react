@@ -37,25 +37,33 @@ gulp.task('watch', function() {
 gulp.task('build-app', function() {
 
 	var externalLib = ['react', 'jquery', 'react-dom', 'flux', 'q'];
-
+	var polyfill = ['object-assign', 'isomorphic-fetch'];
 	// build external libs;
-	var a = browserify();
+	var core_lib = browserify();
 
-	a.require(externalLib);
+	core_lib.require(externalLib);
 
-	a.bundle().pipe(source('vendor.js'))
+	core_lib.bundle().pipe(source('vendor.js'))
+		.pipe(gulp.dest(dest));
+
+
+	// optionally loaded polyfills
+	var poly_fill = browserify();
+	poly_fill.require(polyfill);
+	poly_fill.bundle().pipe(source('polyfill.js'))
 		.pipe(gulp.dest(dest));
 
 	// build application bundle
-	var b = browserify(path.join(__dirname, 'public/src/app.js'), {
+	var application = browserify(path.join(__dirname, 'public/src/app.js'), {
 		debug: true
 	});
 
-	b.external(externalLib);
+	application.external(externalLib);
+	application.external(polyfill);
 
-	b.transform(babelify);
+	application.transform(babelify);
 
-	return b.bundle()
+	application.bundle()
 		//Pass desired output filename to vinyl-source-stream
 		.pipe(source('bundle.js'))
 		// Start piping stream to tasks!

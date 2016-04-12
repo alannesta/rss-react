@@ -26,8 +26,8 @@ var FeedContent = React.createClass({
 		});
 
 		if (this.props.blogContent.blogs.length < this.props.blogContent.blogCount) {
-			//loadMoreButton = <section className="feed-content-loadmore"><button onClick={this.loadMore}>Load More</button></section>;
-			loadMoreButton = <section className="feed-content-loadmore" onClick={this.loadMore} role="button">Load More</section>;
+			loadMoreButton = <section><button className="feed-content-loadmore" onClick={this.loadMore}>Load More</button></section>;
+			//loadMoreButton = <button className="feed-content-loadmore" onClick={this.loadMore}>Load More</button>
 		}
 
 		return (
