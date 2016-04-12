@@ -137,6 +137,11 @@ var BlogActions = {
 		} else {
 			console.log('load blogs from DB');
 
+			// show the load spinner...
+			AppDispatcher.dispatch({
+				actionType: 'START_LOAD_BLOGS'
+			});
+
 			return fetch('/api/feed/' + feedId + '/blogs?count=' + (count || DEFAULT_BLOG_COUNT)).then(function(res) {
 				if (res.status == 200) {
 					return res.json();

@@ -1,5 +1,7 @@
 var React = require('react');
 var BlogActions = require('../actions/blog-actions');
+var classNames = require('classnames');
+
 
 var FeedContent = React.createClass({
 
@@ -14,6 +16,11 @@ var FeedContent = React.createClass({
 		var content = [];
 		var loadMoreButton;
 
+		var loadButtonClass = classNames({
+			'isLoading': this.props.blogContent.isLoading,
+			'feed-content-loadmore': true
+		});
+
 		this.props.blogContent.blogs.forEach(function(item, index) {
 			content.push(
 				<section key={index}>
@@ -26,7 +33,7 @@ var FeedContent = React.createClass({
 		});
 
 		if (this.props.blogContent.blogs.length < this.props.blogContent.blogCount) {
-			loadMoreButton = <section><button className="feed-content-loadmore" onClick={this.loadMore}>Load More</button></section>;
+			loadMoreButton = <section><button className={loadButtonClass} onClick={this.loadMore}>Load More</button></section>;
 			//loadMoreButton = <button className="feed-content-loadmore" onClick={this.loadMore}>Load More</button>
 		}
 

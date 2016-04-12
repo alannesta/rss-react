@@ -12,7 +12,8 @@ var _feedsState = {
 	blogContent: {
 		blogCount: 0,
 		blogs: [],
-		feedId: -1
+		feedId: -1,
+		isLoading: false
 	}
 };
 
@@ -44,10 +45,16 @@ AppDispatcher.register(function(action) {
 			FeedStore.emitChange();
 			break;
 
+		case 'START_LOAD_BLOGS':
+			_feedsState.blogContent.isLoading = true;
+			FeedStore.emitChange();
+			break;
+
 		case 'LOAD_BLOGS':
 			_feedsState.blogContent.blogs = action.blogContent.blogs;
 			_feedsState.blogContent.blogCount = action.blogContent.blogCount;
 			_feedsState.blogContent.feedId = action.blogContent.feedId;
+			_feedsState.blogContent.isLoading = false;
 			FeedStore.emitChange();
 			break;
 
